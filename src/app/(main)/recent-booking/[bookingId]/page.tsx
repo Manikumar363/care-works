@@ -4,7 +4,9 @@ import { useState } from "react";
 import { useGetRecentBookingsQuery } from "@/store/api/bookingApi";
 import BookingDetails from "@/components/RecentBooked/BookingDetails";
 import { Sidebar } from "@/components/RecentBooked/Sidebar";
-import HeroSectionCareProvider from "@/components/careProvider/HeroSectionCareProvider";
+import HeroSectionProtected from "@/components/common/HeroSectionProtected";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function BookingDetailsPage() {
   const { bookingId } = useParams();
@@ -21,7 +23,18 @@ export default function BookingDetailsPage() {
 
   return (
     <>
-      <HeroSectionCareProvider title="Care Request Details" />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <HeroSectionProtected title="Care Request Details" />
       <div className="min-h-screen bg-[#F8F9FA] max-w-7xl mx-auto flex flex-col md:flex-row p-4 gap-4">
         {isLoading ? (
           <>

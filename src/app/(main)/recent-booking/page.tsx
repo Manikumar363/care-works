@@ -2,14 +2,14 @@
 import { useState } from "react";
 import RightBookingsPanel from "@/components/RecentBooked/RightSide";
 import { Sidebar } from "@/components/RecentBooked/Sidebar";
-import HeroSectionCareProvider from "@/components/careProvider/HeroSectionCareProvider";
+import HeroSectionProtected from "@/components/common/HeroSectionProtected";
 
 export default function Page() {
   const [selectedOption, setSelectedOption] = useState("Recent Care Requests");
 
   return (
     <>
-      <HeroSectionCareProvider title="Recent Care Requests" />
+      <HeroSectionProtected title="Recent Care Requests" />
       <div className="min-h-screen bg-[#F8F9FA] max-w-7xl mx-auto flex flex-col md:flex-row p-4 gap-4">
         <Sidebar onSelect={setSelectedOption} selected={selectedOption} />
         <div className="w-full md:w-3/4">

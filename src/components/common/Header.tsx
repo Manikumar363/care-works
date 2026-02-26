@@ -116,7 +116,7 @@ const Header = () => {
         { title: "Sitter Services", link: "/service/sitter-service" },
         { title: "Companion Care", link: "/service/companion-care" },
         { title: "Transportation", link: "/service/transportation" },
-        { title: "Transitional Care", link: "/veterans" },
+        { title: "Transitional Care", link: "/transitional-care" },
       ],
     },
     {
@@ -137,7 +137,7 @@ const Header = () => {
       title: "Login",
       services: [
         { title: "Login as Care Seeker", link: "/signin" },
-        { title: "Login as Care Giver", link: "https://carenest-caregiver.vercel.app/signin" },
+        { title: "Login as Care Giver", link: "https://caregiver.careworks.biz/signin" },
       ],
     });
   } else {
@@ -265,7 +265,7 @@ const Header = () => {
                     </a>
                     <div className="mx-3 h-px bg-[var(--navy)]/10" />
                     <a
-                      href="https://carenest-caregiver.vercel.app/signin"
+                      href="https://caregiver.careworks.biz"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-3 py-3 text-sm font-semibold cursor-pointer hover:bg-[#233D4D] hover:text-white block w-full transition-colors"

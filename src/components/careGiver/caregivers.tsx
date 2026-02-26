@@ -234,7 +234,7 @@ const CaregiversPage = () => {
   const mappedCaregiversForCards = caregivers.map(c => ({
     id: c.id,
     name: c.name,
-    avatar: c.avatar ?? "/care-giver/boy-icon.png",
+    avatar: c.avatar ?? "/profile-5.png",
     specialty: c.services.join(", "),
     experience: `${c.experience} Years`,
     price: c.price ? `$${c.price}/hr` : "N/A",
@@ -246,7 +246,7 @@ const CaregiversPage = () => {
   const mappedCaregiversForSchedule = selectedCaregivers.map(c => ({
     id: c.id,
     name: c.name,
-    avatar: c.avatar ?? "/care-giver/boy-icon.png",
+    avatar: c.avatar ?? "/profile-5.png",
     specialty: c.services.join(", "),
     experience: `${c.experience} Years`,
     price: c.price ? `$${c.price}/hr` : "N/A",
@@ -417,7 +417,7 @@ const CaregiversPage = () => {
               <button
                 onClick={() => {
                   if (mappedCaregiversForSchedule.length < 1) {
-                    toast.error("Please select at least 1 caregiver to proceed with booking.");
+                    toast.error("Kindly add at least one caregiver before proceeding with the care request");
                     return;
                   }
                   setIsScheduleOpen(true);

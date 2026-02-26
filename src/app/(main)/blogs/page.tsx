@@ -1,6 +1,6 @@
 import Section3 from "@/components/Blog/Section3";
 import CardSection from "@/components/Blog/CardSection";
-import HeroSectionCareProvider from "@/components/careProvider/HeroSectionCareProvider";
+import HeroSectionProtected from "@/components/common/HeroSectionProtected";
 
 
 export const metadata = {
@@ -56,7 +56,7 @@ export default async function BlogsPage({
 
   return (
     <main>
-      <HeroSectionCareProvider title="Blogs" textClasses="lg:ml-10 " />
+      <HeroSectionProtected title="Blogs" />
       <Section3 blog={latest} />
       <CardSection blogs={rest} />
       {totalPages > 1 && (

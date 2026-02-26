@@ -4,6 +4,7 @@ import IntroductionWithCTA from "@/components/careProvider/IntroductionWithCTA";
 import PerkOfCareProvider from "@/components/careProvider/PerkOfCareProvider";
 import RegisterAsCareProvider from "@/components/careProvider/RegisterAsCareProvider";
 import TestimonialCareProvider from "@/components/careProvider/TestimonialCareProvider";
+import HeroSectionProtected from "@/components/common/HeroSectionProtected";
 import React from "react";
 
 export const metadata = {
@@ -13,7 +14,7 @@ export const metadata = {
 const page = () => {
   return (
     <>
-      <HeroSectionCareProvider />
+      <HeroSectionProtected title="Become A Caregiver" />
       <IntroductionWithCTA />
       <PerkOfCareProvider />
       <TestimonialCareProvider />

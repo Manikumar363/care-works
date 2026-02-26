@@ -17,6 +17,7 @@ const RegisterAsCareProvider = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("+1");
   const [gender, setGender] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -32,6 +33,7 @@ const RegisterAsCareProvider = () => {
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!fullName.trim()) newErrors.fullName = "Full Name is required.";
+    else if (!/^[A-Za-z ]+$/.test(fullName.trim())) newErrors.fullName = "Full Name can only contain alphabets and spaces.";
     if (!email.trim()) newErrors.email = "Email is required.";
     else if (!/^\S+@\S+\.\S+$/.test(email)) newErrors.email = "Invalid email format.";
     if (!phoneNumber.trim()) newErrors.phoneNumber = "Phone Number is required.";
@@ -79,8 +81,10 @@ const RegisterAsCareProvider = () => {
   };
 
   const handleEmailChange = (value: string) => {
-    setEmail(value);
-    setShowEmailSuggestions(value.includes("@") && !value.endsWith(".com"));
+    // Remove all spaces from the input
+    const sanitized = value.replace(/\s+/g, "");
+    setEmail(sanitized);
+    setShowEmailSuggestions(sanitized.includes("@") && !sanitized.endsWith(".com"));
   };
 
   const handleEmailSuggestionClick = (suggestion: string) => {
@@ -226,14 +230,32 @@ const RegisterAsCareProvider = () => {
               onSuggestionClick={handleEmailSuggestionClick}
               onBlur={() => setTimeout(() => setShowEmailSuggestions(false), 200)}
             />
-            <Input
-              placeholder="Enter Phone Number"
-              icon={PhoneIcon4}
-              type="tel"
-              value={phoneNumber}
-              onChange={(val) => setPhoneNumber(val.replace(/[^\d]/g, ""))}
-              error={errors.phoneNumber}
-            />
+            <div className="flex flex-col mb-5">
+            
+              <div className="flex items-center gap-2 bg-white rounded-3xl p-4">
+                <select
+                  value={countryCode}
+                  onChange={e => setCountryCode(e.target.value)}
+                  className="bg-transparent outline-none border-none text-[#2B384C]/60 pr-1 cursor-pointer"
+                  style={{ appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }}
+                >
+                  <option value="+1">+1</option>
+                  <option value="+91">+91</option>
+                </select>
+                <input
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={e => {
+                    const digits = e.target.value.replace(/[^0-9]/g, "");
+                    setPhoneNumber(digits.slice(0, 10));
+                  }}
+                  placeholder="Enter Phone Number"
+                  className="flex-1 bg-transparent outline-none border-none text-[#2B384C]/60"
+                  inputMode="numeric"
+                />
+              </div>
+              {errors.phoneNumber && <span className="text-red-500 text-sm mt-1 ml-2">{errors.phoneNumber}</span>}
+            </div>
             <div className="flex flex-col mb-5">
               <div className="flex bg-white rounded-3xl p-4 items-center gap-x-5">
                 <div className="relative w-5 h-5">

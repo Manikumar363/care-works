@@ -332,8 +332,8 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
                     cg.avatar
                       ? cg.avatar.startsWith("http")
                         ? cg.avatar
-                        : `https://creative-story.s3.us-east-1.amazonaws.com/${cg.avatar.replace(/^\/+/, "")}`
-                      : "/care-giver/boy-icon.png"
+                        : `${(process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "").replace(/\/?$/, "/")}${cg.avatar.replace(/^\/+/, "")}`
+                      : "/profile-5.png"
                   }
                   alt={cg.name ?? "Caregiver"}
                   width={56}
@@ -416,7 +416,7 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
               specialty: cg.status || "General Care",
               price: "",
               experience: cg.experience ? `${cg.experience} Years` : "0+ Years",
-              avatar: cg.avatar || "/care-giver/boy-icon.png",
+              avatar: cg.avatar || "/profile-5.png",
             }))}
             onBookingSuccess={handleEditBooking}
             initialStartDate={bookingDetails.startDate ? new Date(bookingDetails.startDate) : null}

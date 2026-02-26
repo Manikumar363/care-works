@@ -71,11 +71,12 @@ export default function ManageProfile() {
     gender: "",
     city: "",
     address: "",
-    mobile: "+1 ",
+    mobile: "",
     zipcode: "",
     careRecipient: "",
   });
 
+  const [countryCode, setCountryCode] = useState("+1");
   const [careRecipient, setCareRecipient] = useState("");
 
   const [errors, setErrors] = useState({
@@ -111,17 +112,31 @@ export default function ManageProfile() {
         if (Number.isFinite(n)) normalizedZip = n;
       }
 
-      const digits = (p.mobile || "").replace(/[^0-9]/g, "");
-      const withoutCountry = digits.startsWith("1") ? digits.slice(1) : digits;
-      const limitedMobile = withoutCountry.slice(0, 10);
+      const rawMobile = p.mobile || "";
+      const digits = rawMobile.replace(/[^0-9]/g, "");
+      
+      // Detect country code
+      let detectedCode = "+1";
+      let phoneDigits = "";
+      
+      if (digits.startsWith("91") && digits.length === 12) {
+        detectedCode = "+91";
+        phoneDigits = digits.slice(2, 12);
+      } else if (digits.startsWith("1") && digits.length === 11) {
+        detectedCode = "+1";
+        phoneDigits = digits.slice(1, 11);
+      } else if (digits.length === 10) {
+        phoneDigits = digits;
+      }
 
+      setCountryCode(detectedCode);
       setForm({
         name: p.name || "",
         email: p.email || "",
         gender: p.gender || "",
         city: (p as any).city || "",
         address: p.address || "",
-        mobile: `+1 ${limitedMobile}`,
+        mobile: phoneDigits,
         zipcode: normalizedZip !== undefined ? String(normalizedZip) : "",
         careRecipient: "",
       });
@@ -159,8 +174,7 @@ export default function ManageProfile() {
         return value.trim() === "" ? "Address is required" : "";
       case "mobile": {
         const digits = value.replace(/[^0-9]/g, "");
-        const tenDigits = digits.startsWith("1") ? digits.slice(1) : digits;
-        return /^\d{10}$/.test(tenDigits) ? "" : "Mobile must be 10 digits";
+        return /^\d{10}$/.test(digits) ? "" : "Mobile must be 10 digits";
       }
       case "zipcode":
         return /^\d{5}$/.test(value) ? "" : "Zip code must be 5 digits";
@@ -175,14 +189,13 @@ export default function ManageProfile() {
     
     if (name === "mobile") {
       const digits = value.replace(/\D/g, "");
-      const withoutCountry = digits.startsWith("1") ? digits.slice(1) : digits;
-      const limited = withoutCountry.slice(0, 10);
-      nextVal = `+1 ${limited}`;
+      const limited = digits.slice(0, 10);
+      nextVal = limited;
     } else if (name === "zipcode") {
       nextVal = value.replace(/\D/g, "");
     } else if (name === "name") {
-      // Only allow alphabets and spaces
-      nextVal = value.replace(/[^a-zA-Z\s]/g, "");
+      // Only allow alphabets, spaces, and commas
+      nextVal = value.replace(/[^a-zA-Z\s,]/g, "");
     }
 
     setForm((prev) => ({ ...prev, [name]: nextVal }));
@@ -272,9 +285,13 @@ export default function ManageProfile() {
 
     try {
       const mobileDigits = form.mobile.replace(/[^0-9]/g, "");
+      const fullMobile = countryCode === "+91" 
+        ? `91${mobileDigits}` 
+        : `1${mobileDigits}`;
+      
       const payload = {
         ...form,
-        mobile: mobileDigits,
+        mobile: fullMobile,
         zipcode: zipNum, // send number
       } as unknown as Parameters<typeof updateProfile>[0];
 
@@ -462,14 +479,15 @@ export default function ManageProfile() {
                 error={errors.zipcode}
                 type="tel"
               />
-              <InputField
+              <PhoneInputField
                 name="mobile"
                 value={form.mobile}
                 onChange={handleChange}
                 placeholder="Phone Number"
                 icon={dailerIcon()}
                 error={errors.mobile}
-                type="tel"
+                countryCode={countryCode}
+                onCountryCodeChange={setCountryCode}
               />
             </div>
           )}
@@ -579,6 +597,60 @@ function InputField({
           inputMode={type === "tel" ? "numeric" : undefined}
         />
         <span className={`text-xl ${disabled ? "text-gray-400" : "text-gray-500"} flex-shrink-0`}>
+          {icon}
+        </span>
+      </div>
+      {error && <p className="text-red-500 text-sm ml-4">{error}</p>}
+    </div>
+  );
+}
+
+function PhoneInputField({
+  name,
+  value,
+  onChange,
+  placeholder,
+  icon,
+  error,
+  countryCode,
+  onCountryCodeChange,
+}: {
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  icon: React.ReactNode;
+  error?: string;
+  countryCode: string;
+  onCountryCodeChange: (code: string) => void;
+}) {
+  return (
+    <div className="space-y-1">
+      <div
+        className={`flex items-center gap-3 bg-[#F8F8F8] px-4 py-4 rounded-full border ${
+          error
+            ? "border-red-500 ring-2 ring-red-400"
+            : "focus-within:ring-2 ring-yellow-400"
+        }`}
+      >
+        <select
+          value={countryCode}
+          onChange={(e) => onCountryCodeChange(e.target.value)}
+          className="bg-transparent outline-none text-lg text-[#2B384C]/60 pr-2 border-r border-gray-300"
+        >
+          <option value="+1">+1</option>
+          <option value="+91">+91</option>
+        </select>
+        <input
+          type="tel"
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className="flex-1 bg-transparent outline-none text-lg text-[#2B384C]/60"
+          inputMode="numeric"
+        />
+        <span className="text-xl text-gray-500 flex-shrink-0">
           {icon}
         </span>
       </div>

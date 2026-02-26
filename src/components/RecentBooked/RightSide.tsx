@@ -382,8 +382,8 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
               avatar: c.avatar
                 ? c.avatar.startsWith("http")
                   ? c.avatar
-                  : `https://creative-story.s3.us-east-1.amazonaws.com/${c.avatar.replace(/^\/+/, "")}`
-                : "/care-giver/boy-icon.png",
+                  : `${(process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "").replace(/\/?$/, "/")}${c.avatar.replace(/^\/+/, "")}`
+                : "/profile-5.png",
             })) || []
         }
         serviceIds={serviceIds}

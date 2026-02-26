@@ -163,7 +163,7 @@ export default function VeteransFinancialAssistance({ pageData, faqSectionTitle,
       <div className="w-full bg-[#F2E9CE] py-10 md:py-12 mt-12 md:mt-16">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 md:gap-10 md:flex-row px-4 md:px-6">
           <div className="w-full md:w-1/2">
-            <h3 className="mb-4 text-2xl sm:text-2xl font-semibold text-[#233D4D]">
+            <h3 className="mb-4 text-2xl sm:text-4xl font-semibold text-[#233D4D]">
               {pageData?.title3 ||
                 "There Is Absolutely No Cost To The Veteran Or Their Surviving Spouse To Assist You With Preparing And Managing Your Application Approval Process With The VA, Including:"}
             </h3>

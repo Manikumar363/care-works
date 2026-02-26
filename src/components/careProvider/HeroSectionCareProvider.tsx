@@ -35,7 +35,7 @@ const HeroSectionCareProvider = ({ title, textClasses }: Props) => {
           style={{
             background:
               // Desktop: horizontal gradient (left to right)
-              'linear-gradient(90deg, #233d4d 0%, #233d4d 20%, rgba(35,61,77,0.7) 40%, rgba(35,61,77,0) 80%)',
+              'linear-gradient(90deg, #233d4d 0%, #233d4d 20%, rgba(35,61,77,0.7) 30%, rgba(35,61,77,0) 60%)',
           }}
         />
       </div>

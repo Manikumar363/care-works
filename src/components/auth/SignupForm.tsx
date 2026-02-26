@@ -21,7 +21,8 @@ import { useSignupMutation } from "@/store/api/authApi";
 function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("+1 ");
+  const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("+1");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
@@ -59,7 +60,7 @@ function SignupForm() {
     switch (field) {
       case "name":
         if (!value.trim()) return "Name is required";
-        return /^[a-zA-Z\s]*$/.test(value) ? "" : "Name can only contain letters and spaces";
+        return /^[a-zA-Z\s,]*$/.test(value) ? "" : "Name can only contain letters and spaces";
       case "email":
         if (!value.trim()) return "EmailId is required";
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -67,8 +68,7 @@ function SignupForm() {
           : "Invalid email format";
       case "phone": {
         const digits = normalizePhone(value);
-        const tenDigits = digits.startsWith("1") ? digits.slice(1) : digits;
-        return /^\d{10}$/.test(tenDigits) ? "" : "Phone must be 10 digits";
+        return /^\d{10}$/.test(digits) ? "" : "Phone must be 10 digits";
       }
       case "address":
         return value.trim() ? "" : "Address is required";
@@ -139,11 +139,16 @@ function SignupForm() {
     }
 
     try {
+      const phoneDigits = normalizePhone(phone);
+      const fullMobile = countryCode === "+91" 
+        ? `91${phoneDigits}` 
+        : `1${phoneDigits}`;
+      
       const payload: Parameters<typeof signup>[0] = {
         name: name.trim(),
         email: email.trim(),
         address: address.trim(),
-        mobile: normalizePhone(phone),
+        mobile: fullMobile,
         zipcode: zipcodeNum,
         password,
         role: "user",
@@ -194,20 +199,21 @@ function SignupForm() {
         onBlur={() => handleBlur("email", email)}
         className="text-base sm:text-sm md:text-md lg:text-lg placeholder:text-base sm:placeholder:text-sm md:placeholder:text-md lg:placeholder:text-lg"
       />
-      <TextInput
+      <PhoneInputField
         text={phone}
         setText={(value) => {
           if (typeof value === "string") {
             const digits = normalizePhone(value);
-            const withoutCountry = digits.startsWith("1") ? digits.slice(1) : digits;
-            const limited = withoutCountry.slice(0, 10);
-            setPhone(`+1 ${limited}`);
+            const limited = digits.slice(0, 10);
+            setPhone(limited);
           }
         }}
         Icon={phoneIcon}
         placeholder="Enter Phone Number"
         error={touched.phone ? errors.phone : ""}
         onBlur={() => handleBlur("phone", phone)}
+        countryCode={countryCode}
+        onCountryCodeChange={setCountryCode}
         className="text-base sm:text-sm md:text-md lg:text-lg placeholder:text-base sm:placeholder:text-sm md:placeholder:text-md lg:placeholder:text-lg"
       />
       <TextInput
@@ -261,6 +267,60 @@ function SignupForm() {
       </CustomButton>
       <TextWithLines text="or" />
       <GoogleButton />
+    </div>
+  );
+}
+
+function PhoneInputField({
+  text,
+  setText,
+  Icon,
+  placeholder,
+  error,
+  onBlur,
+  countryCode,
+  onCountryCodeChange,
+  className = "",
+}: {
+  text: string;
+  setText: (value: string) => void;
+  Icon: React.ReactNode;
+  placeholder: string;
+  error?: string;
+  onBlur?: () => void;
+  countryCode: string;
+  onCountryCodeChange: (code: string) => void;
+  className?: string;
+}) {
+  return (
+    <div className="space-y-1">
+      <div
+        className={`flex items-center gap-2 bg-white px-4 py-3 rounded-full border ${
+          error
+            ? "border-red-500 ring-2 ring-red-400"
+            : "focus-within:ring-2 ring-yellow-400"
+        }`}
+      >
+        <select
+          value={countryCode}
+          onChange={(e) => onCountryCodeChange(e.target.value)}
+          className="bg-transparent outline-none border-none text-[#2B384C]/60 pr-1 cursor-pointer"
+          style={{ appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }}
+        >
+          <option value="+1">+1</option>
+          <option value="+91">+91</option>
+        </select>
+        <input
+          type="tel"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          className={`flex-1 bg-transparent outline-none border-none text-[#2B384C]/60 ${className}`}
+          inputMode="numeric"
+        />
+      </div>
+      {error && <p className="text-red-500 text-sm ml-4">{error}</p>}
     </div>
   );
 }

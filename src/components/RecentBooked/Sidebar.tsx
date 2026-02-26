@@ -35,6 +35,7 @@ export function Sidebar({ onSelect, selected }: SidebarProps) {
 
   const [showLogout, setShowLogout] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Helper function to construct proper avatar URL
   const getAvatarUrl = (avatarPath: string | null | undefined): string | null => {
@@ -87,6 +88,7 @@ export function Sidebar({ onSelect, selected }: SidebarProps) {
     formData.append("file", file);
 
     try {
+      setIsUploading(true);
       const res = await updateAvatar(formData).unwrap();
       if (res?.success) {
         toast.success("Profile image updated successfully");
@@ -97,6 +99,8 @@ export function Sidebar({ onSelect, selected }: SidebarProps) {
     } catch (error) {
       console.error('Avatar upload error:', error);
       toast.error("Failed to update profile image");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -179,8 +183,14 @@ export function Sidebar({ onSelect, selected }: SidebarProps) {
                   }}
                   unoptimized={avatar?.startsWith('blob:') || false} // For temporary blob URLs
                 />
+                {/* Uploading State */}
+                {isUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-300/60 rounded-full">
+                    <span className="text-xs font-light text-neutral-800">uploading...</span>
+                  </div>
+                )}
                 {/* X icon appears only on hover and centered */}
-                {avatar && (
+                {avatar && !isUploading && (
                   <button
                     type="button"
                     onClick={handleRemoveAvatar}
@@ -205,6 +215,7 @@ export function Sidebar({ onSelect, selected }: SidebarProps) {
                   className="hidden"
                   accept="image/*"
                   onChange={handleAvatarChange}
+                  disabled={isUploading}
                 />
               </div>
 

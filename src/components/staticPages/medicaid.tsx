@@ -444,12 +444,7 @@ export default function MedicaidCASProgram() {
       {/* How To Apply Section */}
       <div className="w-full bg-white py-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="hidden md:block text-3xl sm:text-4xl md:text-5xl font-semibold text-[#233D4D] text-center mb-4">
-            How To Apply For CAS (Community Attendant Service) Program
-          </h2>
-          <p className="hidden md:block text-gray-600 text-center mb-8 sm:mb-12 md:mb-16 text-base sm:text-lg md:text-xl max-w-3xl mx-auto">
-            Applying for the Community Attendant Services (CAS) program involves several steps to ensure you meet the eligibility criteria and receive the appropriate level of care. Here&apos;s a step-by-step guide to help you through the process.
-          </p>
+          
 
           {/* Mobile Layout */}
           <div className="md:hidden max-w-md mx-auto">

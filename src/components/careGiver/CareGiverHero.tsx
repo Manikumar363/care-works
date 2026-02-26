@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/select";
 
 import { BrowseCaregiver } from "../landingPage/HeroSection";
-import HeroSectionCareProvider from "../careProvider/HeroSectionCareProvider";
+import HeroSectionCareProtected from "../common/HeroSectionProtected";
 
 export const CareGiverHero = () => {
   return (
     <div className="relative  ">
-      <HeroSectionCareProvider title="Find A Caregiver" />
+      <HeroSectionCareProtected title="Find A Caregiver" />
 
       <div className="lg:flex items-center justify-center lg:absolute sm:-bottom-26  bottom-0 lg:-translate-x-1/2 lg:left-[890px] lg:m-0 m-4">
         <BrowseCaregiver

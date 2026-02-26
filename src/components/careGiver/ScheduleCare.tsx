@@ -152,6 +152,7 @@ const ScheduleCare = ({
   const [schedule, setSchedule] = useState<Record<Day, { id: string; start: number; end: number }[]>>(initialSchedule);
   const [applyAll, setApplyAll] = useState(true);
   const [varySchedule, setVarySchedule] = useState(false);
+  const [prevApplyAll, setPrevApplyAll] = useState(applyAll);
 
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -201,11 +202,13 @@ const ScheduleCare = ({
         setSelectedDays(days);
         setSchedule(sched);
         setApplyAll(false);
+        setPrevApplyAll(false);
       } else {
         // Default for new booking or no previous schedule
         setSelectedDays(["Sun", "Mon"]);
         setSchedule(initialSchedule);
         setApplyAll(true);
+        setPrevApplyAll(true);
       }
     }
     // Reset dragging state if modal is closed
@@ -213,6 +216,7 @@ const ScheduleCare = ({
       setSelectedDays([]);
       setSchedule(initialSchedule);
       setApplyAll(true);
+      setPrevApplyAll(true);
     }
   }, [isOpen, isEditMode, initialWeeklySchedule]);
 
@@ -397,7 +401,7 @@ const ScheduleCare = ({
     );
 
     const oldScheduleStr = JSON.stringify(
-      initialWeeklySchedule.sort((a, b) => a.weekDay - b.weekDay)
+      [...initialWeeklySchedule].sort((a, b) => a.weekDay - b.weekDay)
     );
 
     return newScheduleStr !== oldScheduleStr;
@@ -505,7 +509,7 @@ const ScheduleCare = ({
             return;
           }
 
-          OnClose();
+          // Call the callback BEFORE closing the modal
           if (onBookingSuccess) {
             onBookingSuccess({
               startDate: payload.startDate,
@@ -514,6 +518,9 @@ const ScheduleCare = ({
               weeklySchedule: payload.weeklySchedule,
             });
           }
+          
+          // Now close the modal
+          OnClose();
         }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any){
@@ -621,7 +628,7 @@ const ScheduleCare = ({
   }
   
   function getExperienceDisplay(experience: string | number | undefined | null) {
-  let experienceDisplay = "0 Years";
+  let experienceDisplay = "N/A";
   if (
     experience !== null &&
     experience !== undefined &&
@@ -635,7 +642,7 @@ const ScheduleCare = ({
       if (numericExp === 99 || numericExp > 10) {
         experienceDisplay = "10+ Years";
       } else if (numericExp === 0) {
-        experienceDisplay = "0 Years";
+        experienceDisplay = "N/A";
       } else {
         const years = Math.max(0, Math.floor(numericExp));
         experienceDisplay = `${years} Years`;
@@ -726,8 +733,8 @@ const ScheduleCare = ({
 
   // Add this useEffect to handle applyAll state changes
   useEffect(() => {
-    // When applyAll is toggled ON, sync all selected days with the first day's time
-    if (applyAll && selectedDays.length > 1) {
+    // Only sync when applyAll is toggled ON (not when selectedDays changes)
+    if (applyAll && !prevApplyAll && selectedDays.length > 1) {
       const firstDay = selectedDays[0];
       const firstDaySchedule = schedule[firstDay]?.[0];
 
@@ -750,8 +757,10 @@ const ScheduleCare = ({
         });
       }
     }
+    // Update previous applyAll state
+    setPrevApplyAll(applyAll);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applyAll, selectedDays]);
+  }, [applyAll]);
 
   if (!isOpen) return null;
 
@@ -808,19 +817,22 @@ const ScheduleCare = ({
                     <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                       <Image
                         src={
-                          c.avatar && c.avatar.trim() !== "/care-giver/boy-icon.png"
+                          c.avatar && c.avatar.trim() !== "/profile-5.png"
                             ? c.avatar.startsWith("http")
                               ? c.avatar
-                              : `https://creative-story.s3.us-east-1.amazonaws.com/${c.avatar.replace(/^\/+/, "")}`
-                            : "/care-giver/boy-icon.png"
+                              : `${(process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "").replace(/\/?$/, "/")}${c.avatar.replace(/^\/+/, "")}`
+                            : "/profile-5.png"
                         }
                         alt={c.name}
                         width={48}
                         height={48}
                         className="w-full h-full object-cover"
-                        onError={() => {
+                        onError={(e) => {
                           // Fallback to default image if local image fails to load
-                          console.error("Image failed to load");
+                          const target = e.currentTarget;
+                          if (target.src !== "/profile-5.png") {
+                            target.src = "/profile-5.png";
+                          }
                         }}
                       />
                     </div>

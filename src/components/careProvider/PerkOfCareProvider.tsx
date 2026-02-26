@@ -71,8 +71,8 @@ const PerkOfCareProvider = () => {
 export const Perks = ({ title, description, icon }: PerksProps) => {
   return (
     <div className="flex flex-col gap-3">
-      <div className="p-2  rounded-full w-10 h-10 flex items-center justify-center">
-        <div className="relative w-13 h-7">
+      <div className="p-2  rounded-full w-13 h-10 flex items-center justify-center">
+        <div className="relative w-15 h-8">
           <Image
             src={icon || ""}
             alt={"perk icon"}

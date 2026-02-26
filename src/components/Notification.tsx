@@ -17,35 +17,32 @@ interface Props {
   handleOpen: () => void;
 }
 
+
 function Notification({ open, handleOpen }: Props) {
   const [page, setPage] = useState(1);
-  const limit = 5;
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const limit = 6;
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [hasMore, setHasMore] = useState(false);
-  
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const token = Cookies.get("authToken");
   const { data, isLoading, isError, refetch } = useGetNotificationsQuery(
     { page, limit },
     { skip: !open || !token }
   );
-  
   const { data: unreadCountData, refetch: refetchUnreadCount } = useGetUnreadCountQuery(undefined, { skip: !token });
   const [markAsRead] = useMarkAsReadMutation();
   const { onNewNotification } = useSocket(token);
   const [deleteNotification] = useDeleteNotificationMutation();
   const [clearAllNotifications] = useClearAllNotificationsMutation();
-
-  
   const unreadCount = unreadCountData?.data?.unreadCount || 0;
 
+  // Infinite scroll: append notifications as you scroll
   useEffect(() => {
     if (!data?.data?.notifications) return;
-
     setHasMore(Boolean(data.data.hasMore));
     setNotifications((prev) => {
       if (page === 1) return data.data.notifications;
-
+      // Append only new notifications
       const existingIds = new Set(prev.map((item) => item.id));
       const nextItems = data.data.notifications.filter((item) => !existingIds.has(item.id));
       return [...prev, ...nextItems];
@@ -55,28 +52,27 @@ function Notification({ open, handleOpen }: Props) {
   // Listen for real-time notifications
   useEffect(() => {
     if (!token) return;
-
     const handleNewNotification = (notification: NotificationType) => {
-      // Refetch notifications when new one arrives
       refetch();
       refetchUnreadCount();
     };
-
     onNewNotification(handleNewNotification);
   }, [token, onNewNotification, refetch, refetchUnreadCount]);
 
-  // Refetch when sheet opens
+
+  // Only reset notifications if token is lost (user logs out)
   useEffect(() => {
-    if (!open || !token) {
+    if (!token) {
       setNotifications([]);
       setHasMore(false);
       setPage(1);
       return;
     }
-
-    setPage(1);
-    refetch();
-    refetchUnreadCount();
+    if (open) {
+      setPage(1);
+      refetch();
+      refetchUnreadCount();
+    }
   }, [open, token, refetch, refetchUnreadCount]);
 
   useEffect(() => {
@@ -101,10 +97,15 @@ function Notification({ open, handleOpen }: Props) {
     }
   };
 
-  const loadMore = () => {
-    if (!hasMore || isLoading || isFetchingMore) return;
-    setIsFetchingMore(true);
-    setPage((prev) => prev + 1);
+  // Infinite scroll handler
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const target = event.currentTarget;
+    const threshold = 80;
+    const distanceFromBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
+    if (distanceFromBottom <= threshold && hasMore && !isLoading && !isFetchingMore) {
+      setIsFetchingMore(true);
+      setPage((prev) => prev + 1);
+    }
   };
 
   const formatTime = (dateString: string) => {
@@ -114,8 +115,6 @@ function Notification({ open, handleOpen }: Props) {
       return "Some time ago";
     }
   };
-
-
 
   const noNotifications = !isLoading && notifications.length === 0;
 
@@ -146,14 +145,7 @@ function Notification({ open, handleOpen }: Props) {
 
         <div
           className="mt-5 flex flex-1 flex-col px-3 overflow-y-auto"
-          onScroll={(event) => {
-            const target = event.currentTarget;
-            const threshold = 80;
-            const distanceFromBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
-            if (distanceFromBottom <= threshold) {
-              loadMore();
-            }
-          }}
+          onScroll={handleScroll}
         >
           {isLoading && page === 1 && (
             <div className="text-center py-8 text-gray-500">
@@ -204,7 +196,7 @@ function Notification({ open, handleOpen }: Props) {
                     </div>
                   </div>
                   
-                  <div className="text-gray-600 text-sm mt-1 line-clamp-2">
+                  <div className="text-gray-600 text-sm mt-1">
                     {notification.description}
                   </div>
                   
@@ -240,6 +232,11 @@ function Notification({ open, handleOpen }: Props) {
           {notifications.length > 0 && !hasMore && (
             <div className="text-center py-4 text-gray-400 text-sm">
               No more notifications
+            </div>
+          )}
+          {isFetchingMore && (
+            <div className="text-center py-2 text-gray-400 text-sm">
+              Loading more...
             </div>
           )}
         </div>

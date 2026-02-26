@@ -61,7 +61,7 @@ const SavedCaregiversPanel = () => {
         ? giver.avatar.startsWith("http")
           ? giver.avatar
           : `${cdnURL}/${giver.avatar.replace(/^\/+/, "")}`
-        : "/care-giver/boy-icon.png",
+        : "/profile-5.png",
       specialty: giver.services.join(", "),
       experience: typeof giver.experience === "string" ? giver.experience : giver.experience ? `${giver.experience} Years` : "0+ Years",
       price: giver.price ? `₹${giver.price}` : "N/A",
@@ -125,7 +125,7 @@ const SavedCaregiversPanel = () => {
                       ? giver.avatar.startsWith("http")
                         ? giver.avatar
                         : `${cdnURL}/${giver.avatar.replace(/^\/+/,"")}`
-                      : "/care-giver/boy-icon.png"
+                      : "/profile-5.png"
                   }
                   specialty={giver.services && giver.services.length > 0 ? giver.services.join(", ") : "General care"}
                   experience={typeof giver.experience === "string" ? giver.experience : giver.experience ? `${giver.experience} Years` : "0+ Years"}
@@ -148,7 +148,7 @@ const SavedCaregiversPanel = () => {
                   .map(giver => ({
                     id: giver.id,
                     name: giver.name,
-                    avatar: giver.avatar ?? "/care-giver/boy-icon.png",
+                    avatar: giver.avatar ?? "/profile-5.png",
                     specialty: giver.services.join(", "),
                     experience: typeof giver.experience === "string" ? giver.experience : giver.experience ? `${giver.experience} Years` : "0+ Years",
                     price: giver.price ? `₹${giver.price}` : "N/A",

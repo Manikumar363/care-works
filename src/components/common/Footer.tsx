@@ -40,7 +40,7 @@ const link: linkSection[] = [
       { title: "Who We Are", link: "/who-we-are" },
       { title: "We Accept Medicaid", link: "/medicaid" },
       { title: "Admin panel", link: "http://admin.careworks.biz"},
-      { title: "Caregiver", link: "https://carenest-caregiver.vercel.app/signin" },
+      { title: "Caregiver", link: "https://caregiver.careworks.biz/" },
     ],
     "Services": [
       { title: "Personal Care", link: "/service/personal-care" },

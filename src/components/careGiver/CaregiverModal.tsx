@@ -171,7 +171,7 @@ const ModalContent: React.FC<{
       ? caregiver.avatar.startsWith("http")
         ? caregiver.avatar
         : `${cdnURL.replace(/\/+$/, "")}/${caregiver.avatar.replace(/^\/+/, "")}`
-      : "/care-giver/boy-icon.png";
+      : "/profile-5.png";
 
   const handleBookmark = async () => {
     if (!caregiver.id) return;
@@ -237,11 +237,6 @@ const ModalContent: React.FC<{
             <InfoRow label="Experience" value={
               getExperienceDisplay(caregiver.experience)
             } />
-            <InfoRow
-              label="Available Distance"
-              value={caregiver.location ? `${caregiver.location}` : "N/A"}
-              isMultiline={true}
-            />
             <InfoRow
               label="Gender"
               value={caregiver.gender && caregiver.gender.trim() ? caregiver.gender : "N/A"}
@@ -315,7 +310,7 @@ const ModalContent: React.FC<{
 
           {/* Location */}
           <CollapsibleSection title="Location" defaultExpanded>
-            <p className="text-[14px] sm:text-[15px] text-[#6B778C]">{caregiver.location ?? caregiver.address ?? "—"}</p>
+            <p className="text-[14px] sm:text-[15px] text-[#6B778C]">{caregiver.address ?? "N/A"}</p>
           </CollapsibleSection>
 
           {/* Services */}
@@ -445,7 +440,7 @@ function getExperienceDisplay(experience: number | undefined | null) {
     return "1 Year";
   }
   if (experience === 0) {
-    return "0 Years";
+    return "N/A";
   }
   if (typeof experience === "number" && experience > 1) {
     return `${Math.floor(experience)} Years`;

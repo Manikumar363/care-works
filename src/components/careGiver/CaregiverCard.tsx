@@ -30,7 +30,7 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
 }) => {
   const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
   // Normalize experience: default to 0, show as "X+ Years"
-  let experienceDisplay = "0 Years";
+  let experienceDisplay = "N/A";
   if (
     experience !== null &&
     experience !== undefined &&
@@ -46,7 +46,7 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
       } else if (numericExp === 1) {
         experienceDisplay = "1 Year";
       } else if (numericExp === 0) {
-        experienceDisplay = "0 Years";
+        experienceDisplay = "N/A";
       } else {
         const years = Math.max(0, Math.floor(numericExp));
         experienceDisplay = `${years} Years`;
@@ -64,11 +64,11 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
         <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-full flex items-center justify-center">
           <Image
             src={
-              avatar && avatar.trim() !== "" && avatar !== "/care-giver/boy-icon.png"
+              avatar && avatar.trim() !== "" && avatar !== "/profile-5.png"
                 ? avatar.startsWith("http")
                   ? avatar
                   : `${cdnURL}/${avatar.replace(/^\/+/, "")}`
-                : "/care-giver/boy-icon.png"
+                : "/profile-5.png"
             }
             alt={name}
             width={96}

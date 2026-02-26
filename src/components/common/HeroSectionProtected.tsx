@@ -11,7 +11,7 @@ const HeroSectionProtected = ({ title, className }: Props) => {
 
   return (
     <div className="relative">
-      <div className="relative h-[220px] sm:h-[260px] lg:h-[320px]">
+      <div className="relative h-[220px] sm:h-[260px] lg:h-[280px]">
         <Image
           src={"/hero-section.png"}
           alt="Logo"
@@ -25,14 +25,14 @@ const HeroSectionProtected = ({ title, className }: Props) => {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(180deg, rgba(35, 61, 77, 0) 0%, rgba(35, 61, 77, 0.35) 45%, rgba(35, 61, 77, 0.85) 85%, rgba(35, 61, 77, 0.95) 100%)",
+            "linear-gradient(to top, #233d4d 0%, #233d4dcc 45%, #233d4d00 100%)",
         }}
       ></div>
       <div
         className="absolute inset-0 pointer-events-none hidden lg:block"
         style={{
           background:
-            "linear-gradient(90deg, rgba(35, 61, 77, 0.92) 0%, rgba(35, 61, 77, 0.75) 30%, rgba(35, 61, 77, 0.25) 70%, rgba(35, 61, 77, 0) 100%)",
+            "linear-gradient(90deg, #233d4d 0%, #233d4d 20%, rgba(35,61,77,0.7) 30%, rgba(35,61,77,0) 60%)",
         }}
       ></div>
 
