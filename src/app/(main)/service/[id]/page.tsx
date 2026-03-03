@@ -26,6 +26,7 @@ export default async function Page(props: any) {
     "home-maker": "Home Maker Service",
     "sitter-service": "Sitter Services",
     "transportation": "Transportation",
+    "memory-care": "Specialized Care",
     "specialized-care": "Specialized Care",
   };
 
@@ -36,7 +37,8 @@ export default async function Page(props: any) {
     "home-maker": "homeMaker",
     "sitter-service": "sitterService",
     "transportation": "transportation",
-    "specialized-care": "specalizedCare", // fallback to personalCare since no specialized data
+    "memory-care": "specalizedCare", // fallback to personalCare since no specialized data
+    "specialized-care": "specalizedCare", // legacy slug support
   };
 
   const careType = apiCareTypeMap[slug] ?? "Personal Care";

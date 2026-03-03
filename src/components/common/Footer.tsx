@@ -45,7 +45,7 @@ const link: linkSection[] = [
     "Services": [
       { title: "Personal Care", link: "/service/personal-care" },
       { title: "Home Maker Care", link: "/service/home-maker" },
-      { title: "Specialized Care", link: "/service/specialized-care" },
+      { title: "Memory Care", link: "/service/memory-care" },
       { title: "Sitter Service", link: "/service/sitter-service" },
       { title: "Transitional Care", link: "/veterans" },
       { title: "Transportation", link: "/service/transportation" },
