@@ -234,7 +234,13 @@ const CaregiversPage = () => {
   const mappedCaregiversForCards = caregivers.map(c => ({
     id: c.id,
     name: c.name,
-    avatar: c.avatar ?? "/profile-5.png",
+    avatar: c.avatar && c.avatar.trim() !== ""
+      ? c.avatar.startsWith("http")
+        ? c.avatar
+        : c.avatar.startsWith("/")
+        ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + c.avatar
+        : (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + "/" + c.avatar
+      : "/profile-5.png",
     specialty: c.services.join(", "),
     experience: `${c.experience} Years`,
     price: c.price ? `$${c.price}/hr` : "N/A",
@@ -246,7 +252,13 @@ const CaregiversPage = () => {
   const mappedCaregiversForSchedule = selectedCaregivers.map(c => ({
     id: c.id,
     name: c.name,
-    avatar: c.avatar ?? "/profile-5.png",
+    avatar: c.avatar && c.avatar.trim() !== ""
+      ? c.avatar.startsWith("http")
+        ? c.avatar
+        : c.avatar.startsWith("/")
+        ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + c.avatar
+        : (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + "/" + c.avatar
+      : "/profile-5.png",
     specialty: c.services.join(", "),
     experience: `${c.experience} Years`,
     price: c.price ? `$${c.price}/hr` : "N/A",

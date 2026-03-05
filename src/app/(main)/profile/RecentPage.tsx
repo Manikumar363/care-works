@@ -60,7 +60,9 @@ const SavedCaregiversPanel = () => {
       avatar: giver.avatar
         ? giver.avatar.startsWith("http")
           ? giver.avatar
-          : `${cdnURL}/${giver.avatar.replace(/^\/+/, "")}`
+          : giver.avatar.startsWith("/")
+          ? cdnURL + giver.avatar
+          : cdnURL + "/" + giver.avatar
         : "/profile-5.png",
       specialty: giver.services.join(", "),
       experience: typeof giver.experience === "string" ? giver.experience : giver.experience ? `${giver.experience} Years` : "0+ Years",
@@ -129,7 +131,9 @@ const SavedCaregiversPanel = () => {
                     giver.avatar
                       ? giver.avatar.startsWith("http")
                         ? giver.avatar
-                        : `${cdnURL}/${giver.avatar.replace(/^\/+/,"")}`
+                        : giver.avatar.startsWith("/")
+                        ? cdnURL + giver.avatar
+                        : cdnURL + "/" + giver.avatar
                       : "/profile-5.png"
                   }
                   specialty={giver.services && giver.services.length > 0 ? giver.services.join(", ") : "General care"}

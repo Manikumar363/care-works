@@ -381,7 +381,9 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
                     cg.avatar
                       ? cg.avatar.startsWith("http")
                         ? cg.avatar
-                        : `${(process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "").replace(/\/?$/, "/")}${cg.avatar.replace(/^\/+/, "")}`
+                        : cg.avatar.startsWith("/")
+                        ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + cg.avatar
+                        : (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + "/" + cg.avatar
                       : "/profile-5.png"
                   }
                   alt={cg.name ?? "Caregiver"}

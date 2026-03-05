@@ -820,7 +820,9 @@ const ScheduleCare = ({
                           c.avatar && c.avatar.trim() !== "/profile-5.png"
                             ? c.avatar.startsWith("http")
                               ? c.avatar
-                              : `${(process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "").replace(/\/?$/, "/")}${c.avatar.replace(/^\/+/, "")}`
+                              : c.avatar.startsWith("/")
+                              ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + c.avatar
+                              : (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + "/" + c.avatar
                             : "/profile-5.png"
                         }
                         alt={c.name}

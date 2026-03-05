@@ -67,7 +67,9 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
               avatar && avatar.trim() !== "" && avatar !== "/profile-5.png"
                 ? avatar.startsWith("http")
                   ? avatar
-                  : `${cdnURL}/${avatar.replace(/^\/+/, "")}`
+                  : avatar.startsWith("/")
+                  ? `${cdnURL}${avatar}`
+                  : `${cdnURL}/${avatar}`
                 : "/profile-5.png"
             }
             alt={name}
