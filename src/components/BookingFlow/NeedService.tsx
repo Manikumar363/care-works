@@ -176,7 +176,7 @@ const NeedService: React.FC = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                Submitting...
+                Loading...
               </>
             ) : (
               "Next"

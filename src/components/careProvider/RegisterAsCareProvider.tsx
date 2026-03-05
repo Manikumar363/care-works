@@ -233,15 +233,24 @@ const RegisterAsCareProvider = () => {
             <div className="flex flex-col mb-5">
             
               <div className="flex items-center gap-2 bg-white rounded-3xl p-4">
-                <select
-                  value={countryCode}
-                  onChange={e => setCountryCode(e.target.value)}
-                  className="bg-transparent outline-none border-none text-[#2B384C]/60 pr-1 cursor-pointer"
-                  style={{ appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }}
-                >
-                  <option value="+1">+1</option>
-                  <option value="+91">+91</option>
-                </select>
+                <div className="relative flex items-center">
+                  <select
+                    value={countryCode}
+                    onChange={e => setCountryCode(e.target.value)}
+                    className="bg-transparent outline-none border-none text-[#2B384C]/60 pr-5 cursor-pointer appearance-none"
+                  >
+                    <option value="+1">+1</option>
+                    <option value="+91">+91</option>
+                  </select>
+                  <svg 
+                    className="absolute right-0 pointer-events-none w-4 h-4 text-[#2B384C]/60" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
                 <input
                   type="tel"
                   value={phoneNumber}

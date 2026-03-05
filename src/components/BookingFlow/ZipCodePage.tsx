@@ -13,6 +13,7 @@ const ZipCodePage: React.FC = () => {
   const [zip, setZip] = useState("");
   const [touched, setTouched] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Only allow exactly 5 digits
   const isValid = /^\d{5}$/.test(zip);
@@ -39,6 +40,7 @@ const ZipCodePage: React.FC = () => {
     }
     const cleanZip = zip.trim();
     if (Number(cleanZip) === 0) return;
+    setIsLoading(true);
     dispatch(setCareseekerZipcode(Number(cleanZip))); // Store in redux
     router.push("/find-job"); // Redirect to /find-job
   }
@@ -124,9 +126,27 @@ const ZipCodePage: React.FC = () => {
 
         <button
             type="submit"
-            className={`w-full bg-[#FFA726] text-[#233D4D] justify-center px-5 py-3 h-[46px] cursor-pointer hover:bg-[#FFB74D] rounded-3xl text-xl font-bold transition whitespace-nowrap`}
+            disabled={isLoading}
+            className={`w-full bg-[#FFA726] text-[#233D4D] justify-center px-5 py-3 h-[46px] cursor-pointer rounded-3xl text-xl font-bold transition whitespace-nowrap flex items-center gap-2 ${
+              isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#FFB74D]"
+            }`}
         >
-          Continue
+          {isLoading ? (
+            <>
+              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" strokeWidth="2" opacity="0.25" />
+                <path
+                  d="M4 12a8 8 0 018-8"
+                  strokeWidth="2"
+                  strokeDasharray="12.56 31.4"
+                  strokeLinecap="round"
+                />
+              </svg>
+              Loading...
+            </>
+          ) : (
+            "Continue"
+          )}
         </button>
       </form>
     </main>

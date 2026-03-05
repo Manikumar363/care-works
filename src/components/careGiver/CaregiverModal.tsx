@@ -310,7 +310,7 @@ const ModalContent: React.FC<{
 
           {/* Location */}
           <CollapsibleSection title="Location" defaultExpanded>
-            <p className="text-[14px] sm:text-[15px] text-[#6B778C]">{caregiver.address ?? "N/A"}</p>
+            <p className="text-[14px] sm:text-[15px] text-[#6B778C]">{caregiver.location ?? "No Location available."}</p>
           </CollapsibleSection>
 
           {/* Services */}

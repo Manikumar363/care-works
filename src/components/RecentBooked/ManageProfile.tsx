@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { LocateFixed as LocateFixedIcon, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { setProfile } from "../../store/profileSlice";
@@ -18,6 +18,7 @@ import {
 } from "@/store/api/profileApi";
 import { MailIcon, UserIcon, LocationIcon, dailerIcon } from "../icons/page";
 import { editprofileimage } from "@/lib/svg_icons";
+import { PiAddressBook, PiCity } from "react-icons/pi";
 
 // Add a narrow type for API profile (no any)
 type ProfileApi = {
@@ -171,10 +172,10 @@ export default function ManageProfile() {
       case "city":
         return value.trim() === "" ? "City is required" : "";
       case "address":
-        return value.trim() === "" ? "Address is required" : "";
+        return value.trim() === "" ? "Service Address is required" : "";
       case "mobile": {
         const digits = value.replace(/[^0-9]/g, "");
-        return /^\d{10}$/.test(digits) ? "" : "Mobile must be 10 digits";
+        return /^\d{10}$/.test(digits) ? "" : "Mobile Number must be 10 digits";
       }
       case "zipcode":
         return /^\d{5}$/.test(value) ? "" : "Zip code must be 5 digits";
@@ -458,15 +459,15 @@ export default function ManageProfile() {
                 value={form.city}
                 onChange={handleChange}
                 placeholder="City"
-                icon={LocationIcon()}
+                icon={<PiCity />}
                 error={errors.city}
               />
               <InputField
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                placeholder="Address"
-                icon={LocationIcon()}
+                placeholder="Service Address"
+                icon={<LocateFixedIcon />}
                 error={errors.address}
               />
               {/* Zip Code */}

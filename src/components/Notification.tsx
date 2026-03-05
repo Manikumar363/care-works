@@ -35,6 +35,8 @@ function Notification({ open, handleOpen }: Props) {
   const [deleteNotification] = useDeleteNotificationMutation();
   const [clearAllNotifications] = useClearAllNotificationsMutation();
   const unreadCount = unreadCountData?.data?.unreadCount || 0;
+  // Format count for display (show 99+ if over 99)
+  const displayCount = unreadCount > 99 ? '99+' : unreadCount.toString();
 
   // Infinite scroll: append notifications as you scroll
   useEffect(() => {
@@ -137,8 +139,8 @@ function Notification({ open, handleOpen }: Props) {
             <div className="ms-[4rem] lg:ms-[5rem] text-xl font-bold">Notifications</div>
           </div>
           {unreadCount > 0 && (
-            <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-              {unreadCount} unread
+            <span className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap">
+              {displayCount} unread
             </span>
           )}
         </div>

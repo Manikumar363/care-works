@@ -47,7 +47,7 @@ const link: linkSection[] = [
       { title: "Home Maker Care", link: "/service/home-maker" },
       { title: "Memory Care", link: "/service/memory-care" },
       { title: "Sitter Service", link: "/service/sitter-service" },
-      { title: "Transitional Care", link: "/veterans" },
+      { title: "Transitional Care", link: "/transitional-care" },
       { title: "Transportation", link: "/service/transportation" },
       { title: "Companion care", link: "/service/companion-care" },
     ],
@@ -253,7 +253,7 @@ const Footer = () => {
 
         <div className="w-full sm:w-auto flex justify-center sm:justify-end order-1 sm:order-0 text-center sm:text-right">
           <p className="text-lg text-[#FFFFFF] font-medium">
-            © 2024 Copyright | All rights reserved
+            © 2026 Copyright | All rights reserved
           </p>
         </div>
       </div>
@@ -269,6 +269,8 @@ const FooterLink = ({
   links: linkItems[];
 }) => {
   const safeLinks = links || [];
+  const isExternalLink = (link: string) => link.startsWith('http://') || link.startsWith('https://');
+  
   return (
     <div>
       <p className="font-medium mb-6 text-white text-start lg:text-left">{title}</p>
@@ -276,7 +278,9 @@ const FooterLink = ({
         {safeLinks.map((item, index) => (
           <li key={index}>
             <Link 
-              href={item.link} 
+              href={item.link}
+              target={isExternalLink(item.link) ? "_blank" : undefined}
+              rel={isExternalLink(item.link) ? "noopener noreferrer" : undefined}
               className="text-lg font-light text-gray-300 hover:text-white transition-colors"
             >
               {item.title}

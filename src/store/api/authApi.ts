@@ -117,6 +117,7 @@ export const authApi = createApi({
       name: string;
       email: string;
       address: string;
+      city: string;
       mobile: string;
       password: string;
       zipcode: number;
@@ -193,7 +194,9 @@ export const authApi = createApi({
       type: 'account_verification' | 'password_reset';
     }>({
       query: (data) => ({
-        url: '/api/v1/user/resend-otp',
+        url: data.type === 'account_verification' 
+          ? '/api/v1/user/signup/otp' 
+          : '/api/v1/user/resend-otp',
         method: 'POST',
         body: data,
       }),

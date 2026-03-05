@@ -108,8 +108,24 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
         bookingId: selectedBooking.id,
         caregiverId: selectedBooking.caregiverId,
       }).unwrap();
-      refetch(); // <-- This reloads the latest bookings
-      toast.success("Care Request cancelled successfully");
+      
+      // Close dialog immediately
+      setOpenDialog(false);
+      setSelectedBooking(null);
+      
+      // Show success toast with higher z-index and persistence
+      toast.success("Care Request cancelled successfully", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        style: { zIndex: 9999 },
+      });
+      
+      // Refetch bookings to update the list
+      await refetch();
     } catch (err) {
       const errorObj = err as {
         data?: { message?: string };
@@ -119,11 +135,16 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
         errorObj?.data?.message ||
         errorObj?.error ||
         "Failed to cancel care request. Please try again.";
-      toast.error(msg);
+      toast.error(msg, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        style: { zIndex: 9999 },
+      });
       console.error("Cancellation error:", err);
-    } finally {
-      setOpenDialog(false);
-      setSelectedBooking(null);
     }
   };
 
@@ -166,8 +187,21 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
           <button
             type="button"
             onClick={() => setFaqOpen(true)}
-            className="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-semibold bg-[var(--yellow)] text-[var(--navy)] hover:brightness-110 transition-all duration-300 whitespace-nowrap"
+            className="relative px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-semibold bg-[var(--yellow)] text-[var(--navy)] hover:brightness-110 transition-all duration-300 whitespace-nowrap hover:animate-none shadow-lg hover:shadow-xl"
+            style={{
+              animation: 'zoom 1.5s ease-in-out infinite',
+            }}
           >
+            <style jsx>{`
+              @keyframes zoom {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+              }
+            `}</style>
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            </span>
             FAQs
           </button>
         </div>
@@ -216,8 +250,21 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
         <button
           type="button"
           onClick={() => setFaqOpen(true)}
-          className="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-semibold bg-[var(--yellow)] text-[var(--navy)] hover:brightness-110 transition-all duration-300 whitespace-nowrap"
+          className="relative px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-semibold bg-[var(--yellow)] text-[var(--navy)] hover:brightness-110 transition-all duration-300 whitespace-nowrap hover:animate-none shadow-lg hover:shadow-xl"
+          style={{
+            animation: 'zoom 1.5s ease-in-out infinite',
+          }}
         >
+          <style jsx>{`
+            @keyframes zoom {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.05); }
+            }
+          `}</style>
+          <span className="absolute -top-1 -right-1 flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+          </span>
           FAQs
         </button>
       </div>
@@ -296,7 +343,7 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
                         height={14}
                         className="w-3.5 h-3.5"
                       />
-                      {new Date(booking.bookedOn).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                      {new Date(booking.bookedOn).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })}
                     </div>
                     <div
                       className={`inline-flex self-start w-fit md:self-auto px-4 py-2 md:px-5 rounded-full text-sm md:text-lg font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.06)] ${
@@ -359,9 +406,11 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
         handleOpen={handleCloseDialog}
         icon={cancelIcon}
         confirmText="Confirm"
+        loadingText="Cancelling..."
+        isLoading={isCancelling}
         handleConfirm={handleConfirmCancel}
         heading="Confirm Cancellation"
-        subheading={`You're about to cancel your booking. Any ongoing or scheduled services will be discontinued.`}
+        subheading={`You're about to cancel your care request. Any ongoing or scheduled services will be discontinued.`}
       />
 
       <ScheduleCare

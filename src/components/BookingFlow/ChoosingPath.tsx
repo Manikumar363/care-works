@@ -61,7 +61,7 @@ const ChoosingPath: React.FC = () => {
                 Build your profile and explore job <br /> opportunities.
               </p>
               <YellowButton
-                onClick={() => (window.location.href = "https://caregiver.careworks.biz/")}
+                onClick={() => window.open("https://caregiver.careworks.biz/", "_blank")}
                 className="mt-2 px-8 py-6 min-w--[200px] text-md font-semibold"
               >
                 Find Caregiving Job

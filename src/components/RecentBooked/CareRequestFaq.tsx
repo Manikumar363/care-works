@@ -56,14 +56,14 @@ export default function CareRequestFaq({ open, onClose }: CareRequestFaqProps) {
 	if (!open) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[156px] pb-8">
+		<div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[140px] pb-8">
 			<button
 				type="button"
 				className="absolute inset-0 bg-black/40"
 				aria-label="Close FAQs"
 				onClick={onClose}
 			/>
-			<div className="relative z-10 w-full max-w-2xl rounded-2xl bg-white shadow-xl max-h-[80vh] flex flex-col">
+			<div className="relative z-10 w-full max-w-2xl rounded-2xl bg-white shadow-xl max-h-[calc(100vh-7rem)] sm:max-h-[calc(100vh-8rem)] md:max-h-[80vh] flex flex-col overflow-hidden">
 				<div className="flex items-start justify-between gap-4 px-5 sm:px-6 pt-5 pb-4 border-b border-[#233D4D1A]">
 					<div>
 						<p className="text-sm font-semibold text-[#F2A307]">Care Request FAQs</p>

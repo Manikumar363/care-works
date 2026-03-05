@@ -793,7 +793,7 @@ const ScheduleCare = ({
 
         {/* Selected caregivers */}
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-[var(--navy)] font-semibold text-base">Selected Caregivers</h2>
+          <h2 className="text-[var(--navy)] font-semibold text-base">Your Shortlisted Caregivers</h2>
           {/* Hide Change button on /profile route or saved-caregivers tab */}
           {typeof window !== "undefined" && !window.location.pathname.includes("/recent-booking") && !window.location.pathname.includes("/profile") && (
             <button
@@ -852,7 +852,7 @@ const ScheduleCare = ({
                       {/* Services - with proper text wrapping */}
                       {c.specialty && (
                         <p className="text-sm text-gray-600 leading-relaxed break-words">
-                          {c.specialty}
+                          {c.specialty.toUpperCase()}
                         </p>
                       )}
                     </div>
@@ -888,7 +888,7 @@ const ScheduleCare = ({
                     selected={meetingDate}
                     onChange={(date) => setMeetingDate(date)}
                     minDate={minSelectableDate}
-                    dateFormat="dd-MM-yyyy"
+                    dateFormat="MM/dd/yyyy"
                     className="!w-full border border-gray-400 rounded-full py-3 pl-4 lg:pr-15 text-[var(--navy)] text-sm focus:ring-2 focus:ring-yellow-400"
                     popperClassName="!z-[9999]"
                   />
@@ -904,7 +904,7 @@ const ScheduleCare = ({
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
                     minDate={minSelectableDate}
-                    dateFormat="dd-MM-yyyy"
+                    dateFormat="MM/dd/yyyy"
                     className="!w-full border border-gray-400 rounded-full py-3 pl-4 lg:pr-15 text-[var(--navy)] text-sm focus:ring-2 focus:ring-yellow-400"
                     popperClassName="!z-[9999]"
                   />
@@ -923,7 +923,7 @@ const ScheduleCare = ({
                   selected={endDate}
                   onChange={(date) => setEndDate(date)}
                   minDate={startDate || new Date()} // End date must be >= service start date
-                  dateFormat="dd-MM-yyyy"
+                  dateFormat="MM/dd/yyyy"
                   placeholderText="Select Date"
                   popperClassName="!z-[9999]"
                   className="!w-full border border-gray-400 rounded-full py-3 pl-4  text-[var(--navy)] text-sm focus:ring-2 focus:ring-yellow-400"

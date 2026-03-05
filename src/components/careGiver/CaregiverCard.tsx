@@ -57,7 +57,7 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`relative ${heightClass ?? "h-32 sm:h-40"} flex flex-row items-center gap-3 sm:gap-6 rounded-2xl p-3 sm:p-4 bg-white shadow border cursor-pointer hover:shadow-lg transition`}
+      className={`relative ${heightClass ?? "min-h-32 sm:min-h-40"} flex flex-row items-center gap-3 sm:gap-6 rounded-2xl p-3 sm:p-4 bg-white shadow border cursor-pointer hover:shadow-lg transition`}
     >
       {/* Avatar with colored background */}
       <div className="relative flex-shrink-0">
@@ -103,7 +103,7 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
             />
           )}
         </div>
-        <p className="text-sm sm:text-md font-normal text-[var(--cool-gray)] truncate">
+        <p className="text-sm sm:text-md font-normal text-[var(--cool-gray)] whitespace-normal break-words leading-snug">
           {specialty}
         </p>
         <div className="flex flex-row gap-2 sm:gap-4 mt-2 h-max text-xs sm:text-sm">

@@ -35,6 +35,7 @@ const serviceImages: Record<string, string> = {
 
 const FindCareGiver: React.FC = () => {
   const [selected, setSelected] = useState<string[]>([]);
+  const [isApiLoading, setIsApiLoading] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -75,7 +76,8 @@ const FindCareGiver: React.FC = () => {
   }
 
   function handleNext() {
-    if (!selected.length) return;
+    if (!selected.length || isApiLoading) return;
+    setIsApiLoading(true);
     console.log("Selected service IDs for booking:", selected);
     dispatch(setServiceIds(selected));
     router.push("/need-service");
@@ -216,13 +218,29 @@ const FindCareGiver: React.FC = () => {
       <div className="flex justify-center mt-12">
         <YellowButton
           onClick={handleNext}
-          className={`px-24 py-6 text-lg font-semibold rounded-full transition-opacity ${
-            !selected.length
+          disabled={!selected.length || isApiLoading}
+          className={`px-24 py-6 text-lg font-semibold rounded-full transition-opacity flex items-center justify-center gap-2 ${
+            !selected.length || isApiLoading
               ? "opacity-50 cursor-not-allowed pointer-events-none"
               : "hover:opacity-90"
           }`}
         >
-          Next
+          {isApiLoading ? (
+            <>
+              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" strokeWidth="2" opacity="0.25" />
+                <path
+                  d="M4 12a8 8 0 018-8"
+                  strokeWidth="2"
+                  strokeDasharray="12.56 31.4"
+                  strokeLinecap="round"
+                />
+              </svg>
+              Loading...
+            </>
+          ) : (
+            "Next"
+          )}
         </YellowButton>
       </div>
     </main>

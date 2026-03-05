@@ -38,7 +38,7 @@ const BookSuccessful = ({ isModalOpen, onClose }: BookSuccessfulProps) => {
 
         {/* Title */}
         <h2 className="text-lg sm:text-2xl font-bold text-center text-[var(--navy)] mb-2 sm:mb-3">
-          Thank you for reaching out to CareWorks
+          Thank You For Reaching Out To CareWorks
         </h2>
 
         {/* Message */}

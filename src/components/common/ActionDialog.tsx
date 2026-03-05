@@ -12,6 +12,8 @@ interface Props {
   heading?: string;
   subheading?: string;
   showCancelButton?: boolean;
+  isLoading?: boolean;
+  loadingText?: string;
 }
 
 function ActionDialog({
@@ -23,6 +25,8 @@ function ActionDialog({
   heading,
   subheading,
   showCancelButton,
+  isLoading = false,
+  loadingText,
 }: Props) {
   return (
     <CustomDialog
@@ -46,12 +50,13 @@ function ActionDialog({
             <CustomButton
               className="flex-1 py-5 text-md bg-gray-200 hover:bg-gray-200 hover:opacity-90 "
               onClick={handleOpen}
+              disabled={isLoading}
             >
               Cancel
             </CustomButton>
           )}
-          <CustomButton className="flex-1 text-md py-5" onClick={handleConfirm}>
-            {confirmText || "Confirm"}
+          <CustomButton className="flex-1 text-md py-5" onClick={handleConfirm} disabled={isLoading}>
+            {isLoading ? loadingText || "Loading..." : confirmText || "Confirm"}
           </CustomButton>
         </div>
       </div>

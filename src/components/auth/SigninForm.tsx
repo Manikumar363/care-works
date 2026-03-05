@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -29,6 +29,12 @@ function SigninForm() {
   const pendingBooking = useAppSelector(state => state.booking.pendingBooking);
   const dispatch = useAppDispatch();
   const [createBooking] = useCreateBookingMutation();
+
+  // Load remember me preference on mount
+  useEffect(() => {
+    const savedRememberMe = localStorage.getItem("rememberMe") === "true";
+    setRememberMe(savedRememberMe);
+  }, []);
 
   const getEmailSuggestions = () => {
     if (!email || !email.includes("@")) return [];
@@ -85,14 +91,17 @@ function SigninForm() {
       }).unwrap();
 
       if (response && response.success) {
-        // Set tokens with appropriate expiration
-        if (rememberMe) {
-          Cookies.set("authToken", response.data.accessToken, { expires: 7 }); // 1 week
-          Cookies.set("refreshToken", response.data.refreshToken, { expires: 30 }); // 1 month
-        } else {
-          Cookies.set("authToken", response.data.accessToken); // Session cookie
-          Cookies.set("refreshToken", response.data.refreshToken); // Session cookie
-        }
+        // Set tokens with appropriate expiration based on rememberMe
+        const cookieOptions = rememberMe 
+          ? { expires: 7 } // 7 days if remember me is checked
+          : {}; // session cookie if remember me is unchecked
+
+        // Set both accessToken and refreshToken
+        Cookies.set("authToken", response.data.accessToken, cookieOptions);
+        Cookies.set("refreshToken", response.data.refreshToken, cookieOptions);
+        
+        // Save remember me preference to localStorage
+        localStorage.setItem("rememberMe", rememberMe.toString());
 
         toast.success("Login successful!");
 
@@ -129,7 +138,7 @@ function SigninForm() {
         toast.error("Login failed. Please check your credentials and try again.");
         console.error("Login failed:", error);
       }
-    } 
+    }
   };
 
   return (
@@ -177,14 +186,16 @@ function SigninForm() {
         <Checkbox
           id="rememberMe"
           checked={rememberMe}
-          onChange={(e) => setRememberMe(e.target.checked)}
+          onChange={(e) => {
+            const isChecked = (e.target as HTMLInputElement).checked;
+            setRememberMe(isChecked);
+            localStorage.setItem("rememberMe", isChecked.toString());
+          }}
         />
-        <Label htmlFor="rememberMe" className="text-md">Remember me</Label>
+        <Label htmlFor="rememberMe" className="text-md cursor-pointer">Remember me</Label>
       </div>
 
-      <CustomButton className="mt-4 mb-3 text-lg" onClick={handleSubmit} 
-      //disabled={isLoading}
-      >
+      <CustomButton className="mt-4 mb-3 text-lg" onClick={handleSubmit} disabled={isLoading}>
         {isLoading ? "Signing in..." : "Sign In"}
       </CustomButton>
 

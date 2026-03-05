@@ -16,6 +16,24 @@ interface BookingDetailsProps {
   isLoading?: boolean;
 }
 
+const statusColor: Record<string, string> = {
+  requested: "bg-[#E7A200] text-white",
+  pending: "bg-[#E7A200] text-white",
+  active: "bg-[#233D4D] text-white",
+  accepted: "bg-[#233D4D] text-white",
+  completed: "bg-[#5FC009] text-white",
+  cancelled: "bg-[#FF5C5F] text-white",
+};
+
+const apiToUiStatus: Record<string, string> = {
+  pending: "Pending",
+  accepted: "Accepted",
+  completed: "Completed",
+  cancelled: "Cancelled",
+  active: "Active",
+  requested: "Requested",
+};
+
 export default function BookingDetails({ booking, isLoading = false }: BookingDetailsProps) {
   const router = useRouter(); // <-- added router
   const [openDeleteDialog, setOpenDialog] = useState(false);
@@ -37,14 +55,34 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
     const caregiverId = bookingDetails.caregivers[0].id;
     try {
       await cancelBooking({ bookingId: bookingDetails.bookingId, caregiverId }).unwrap();
+      // Close dialog immediately
+      setOpenDialog(false);
       // update local state so UI reflects cancelled status immediately
       setBookingDetails(prev => ({ ...prev, status: "cancelled" }));
-      toast.success("Care Request cancelled successfully");
-      setOpenDialog(false);
-      // navigate back to previous page
-      router.push('/recent-booking');
+      // Show success toast with explicit configuration
+      toast.success("Care Request cancelled successfully", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        style: { zIndex: 9999 },
+      });
+      // navigate back to previous page after toast is visible
+      setTimeout(() => {
+        router.push('/recent-booking');
+      }, 500);
     } catch {
-      toast.error("Failed to cancel care request");
+      toast.error("Failed to cancel care request", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        style: { zIndex: 9999 },
+      });
       setOpenDialog(false);
     }
   };
@@ -200,7 +238,18 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
           <h2 className="text-xl sm:text-2xl md:text-lg font-semibold text-[#2F3C51]">
             Recent Care Request / <span className="text-[#2F3C51]">#{booking.bookingId}</span>
           </h2>
-          <div className="flex gap-2 ml-2 sm:gap-4">
+          <div className="flex gap-2 ml-2 sm:gap-4 items-center">
+            {/* Booking Status Badge - Hide for cancelled bookings */}
+            {booking.status !== "cancelled" && booking.status !== "canceled" && (
+              <span
+                className={`px-4 py-2 rounded-full text-sm font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.06)] whitespace-nowrap ${
+                  statusColor[booking.status?.toLowerCase?.() || ""] || "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {apiToUiStatus[booking.status?.toLowerCase?.() || ""] || booking.status || "Unknown"}
+              </span>
+            )}
+
             {/* Hide Edit button for completed or cancelled bookings */}
             {booking.status !== "completed" &&
               booking.status !== "cancelled" &&
@@ -246,15 +295,15 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
                 <span className="block text-[#233D4D] text-base font-semibold mb-1">Care Requested On:</span>
                 <span className="block text-[#B0B7C3] text-lg font-md">
                   {bookingDetails.bookedOn
-                      ? parseDateLocal(bookingDetails.bookedOn)?.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                      ? parseDateLocal(bookingDetails.bookedOn)?.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
                     : "N/A"}
                 </span>
               </div>
               <div>
-                <span className="block text-[#233D4D] text-base font-semibold mb-1">Meeting Date:</span>
+                <span className="block text-[#233D4D] text-base font-semibold mb-1">Preferred Meeting Date:</span>
                 <span className="block text-[#B0B7C3] text-lg font-md">
                   {bookingDetails.meetingDate
-                      ? parseDateLocal(bookingDetails.meetingDate)?.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                      ? parseDateLocal(bookingDetails.meetingDate)?.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
                     : "N/A"}
                 </span>
               </div>
@@ -262,10 +311,10 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
             {/* Column 2 */}
             <div className="flex flex-col gap-4">
               <div>
-                <span className="block text-[#233D4D] text-base font-semibold mb-1">Service start Date:</span>
+                <span className="block text-[#233D4D] text-base font-semibold mb-1">Service Start Date:</span>
                 <span className="block text-[#B0B7C3] text-lg font-md">
                   {bookingDetails.startDate
-                      ? parseDateLocal(bookingDetails.startDate)?.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                      ? parseDateLocal(bookingDetails.startDate)?.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
                     : "N/A"}
                 </span>
               </div>
@@ -273,7 +322,7 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
                 <span className="block text-[#233D4D] text-base font-semibold mb-1">Service End Date:</span>
                 <span className="block text-[#B0B7C3] text-lg font-md">
                   {bookingDetails.endDate
-                      ? parseDateLocal(bookingDetails.endDate)?.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                      ? parseDateLocal(bookingDetails.endDate)?.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
                     : "N/A"}
                 </span>
               </div>
@@ -289,7 +338,7 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
             {/* Column 3 */}
             <div className="flex flex-col gap-4">
               <div>
-                <span className="block text-[#233D4D] text-base font-semibold mb-1">Service Date and Times:</span>
+                <span className="block text-[#233D4D] text-base font-semibold mb-1">Service Days and Times:</span>
                 <span className="block text-[#B0B7C3] text-lg font-md">
                   {(() => {
                     const scheduleArr = formatWeeklyScheduleArr(bookingDetails.weeklySchedule);
@@ -402,7 +451,7 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
           confirmText="Confirm"
           handleConfirm={handleCancelBooking}
           heading="Confirm Cancellation"
-          subheading="Are you sure you want to cancel this care request?"
+          subheading="You're about to cancel your care request. Any ongoing or scheduled services will be discontinued."
         />
 
         {/* Edit Booking Schedule */}

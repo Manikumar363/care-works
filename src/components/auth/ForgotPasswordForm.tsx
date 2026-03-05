@@ -84,10 +84,7 @@ function ForgotPasswordForm() {
         className="text-base sm:text-sm md:text-md lg:text-lg placeholder:text-base sm:placeholder:text-sm md:placeholder:text-md lg:placeholder:text-lg"
       />
 
-      <CustomButton className="mt-6" onClick={handleSubmit} 
-      //disabled={isLoading}
-
-      >
+      <CustomButton className="mt-6" onClick={handleSubmit} disabled={isLoading}>
         {isLoading ? "Sending..." : "Send"}
       </CustomButton>
     </div>

@@ -148,6 +148,7 @@ function SignupForm() {
         name: name.trim(),
         email: email.trim(),
         address: address.trim(),
+        city: city.trim(),
         mobile: fullMobile,
         zipcode: zipcodeNum,
         password,
@@ -157,8 +158,12 @@ function SignupForm() {
       const response = await signup(payload).unwrap();
       if (response?.data?.userId) {
         Cookies.set("userId", response.data.userId, { expires: 1 / 24 });
-        toast.success("Account creation successful!");
-        router.push("/email-verification");
+        toast.success("Account successfully Created");
+        toast.info(`OTP sent to ${email.trim()}`);
+        // Add a delay before redirecting to ensure user sees the success message
+        setTimeout(() => {
+          router.push("/email-verification");
+        }, 1500);
       }
     } catch (err: unknown) {
       if (typeof err === "object" && err !== null && "data" in err) {
@@ -301,15 +306,24 @@ function PhoneInputField({
             : "focus-within:ring-2 ring-yellow-400"
         }`}
       >
-        <select
-          value={countryCode}
-          onChange={(e) => onCountryCodeChange(e.target.value)}
-          className="bg-transparent outline-none border-none text-[#2B384C]/60 pr-1 cursor-pointer"
-          style={{ appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }}
-        >
-          <option value="+1">+1</option>
-          <option value="+91">+91</option>
-        </select>
+        <div className="relative flex items-center">
+          <select
+            value={countryCode}
+            onChange={(e) => onCountryCodeChange(e.target.value)}
+            className="bg-transparent outline-none border-none text-[#2B384C]/60 pr-5 cursor-pointer appearance-none"
+          >
+            <option value="+1">+1</option>
+            <option value="+91">+91</option>
+          </select>
+          <svg 
+            className="absolute right-0 pointer-events-none w-4 h-4 text-[#2B384C]/60" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
         <input
           type="tel"
           value={text}

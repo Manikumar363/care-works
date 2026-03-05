@@ -96,7 +96,12 @@ const SavedCaregiversPanel = () => {
 
   return (
     <div className="p-3 sm:p-4 md:p-6 mt-6 md:mt-10">
-      <ToastContainer position="top-right" autoClose={3000} containerId={toastContainerId} />
+      <ToastContainer 
+        position="top-right" 
+        autoClose={3000} 
+        containerId={toastContainerId}
+        style={{ zIndex: 9999 }}
+      />
       <h2 className="text-2xl text-center sm:text-left sm:text-2xl font-bold">Saved Caregivers</h2>
       {data.data.givers.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-8 sm:mt-10 space-y-4">
@@ -113,7 +118,7 @@ const SavedCaregiversPanel = () => {
       ) : (
         <>
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
-            <p className="text-sm sm:text-base">Select caregivers to request their services (Select at least 1)</p>
+            <p className="text-sm sm:text-base">Select atleast one caregiver for the care request</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
               {data.data.givers.map((giver) => (
@@ -130,7 +135,7 @@ const SavedCaregiversPanel = () => {
                   specialty={giver.services && giver.services.length > 0 ? giver.services.join(", ") : "General care"}
                   experience={typeof giver.experience === "string" ? giver.experience : giver.experience ? `${giver.experience} Years` : "0+ Years"}
                   isBookmarked={true}
-                  heightClass="h-30"
+                  heightClass="min-h-30"
                   isSelected={selectedCaregiverIds.includes(giver.id)}
                   isVerified={giver.verified}
                   onClick={() => setSelectedCaregiverId(giver.id)}

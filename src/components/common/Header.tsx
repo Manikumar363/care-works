@@ -42,6 +42,8 @@ const Header = () => {
   });
 
   const unreadCount = unreadCountData?.data?.unreadCount || 0;
+  // Format count for display (show 99+ if over 99)
+  const displayCount = unreadCount > 99 ? '99+' : unreadCount.toString();
 
   const path = usePathname();
 
@@ -172,9 +174,11 @@ const Header = () => {
             {/* Show unread notification indicator */}
             {mounted && unreadCount > 0 && (
               <div className="absolute -top-1 -right-1">
-                <div className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center">
-                  <span className="text-white text-xs font-semibold">
-                    {unreadCount}
+                <div className={`relative inline-flex rounded-full bg-red-500 items-center justify-center ${
+                  unreadCount > 99 ? 'h-6 w-8 px-1' : unreadCount > 9 ? 'h-5 w-6' : 'h-5 w-5'
+                }`}>
+                  <span className="text-white text-xs font-bold leading-none">
+                    {displayCount}
                   </span>
                 </div>
               </div>
@@ -293,9 +297,11 @@ const Header = () => {
               {/* Show unread notification indicator */}
               {mounted && unreadCount > 0 && (
                 <div className="absolute -top-1 -right-1">
-                  <div className="relative inline-flex rounded-full h-4 w-4 bg-red-500 items-center justify-center">
-                    <span className="text-white text-xs font-bold">
-                      {unreadCount}
+                  <div className={`relative inline-flex rounded-full bg-red-500 items-center justify-center ${
+                    unreadCount > 99 ? 'h-5 w-7 px-1' : unreadCount > 9 ? 'h-4 w-5' : 'h-4 w-4'
+                  }`}>
+                    <span className="text-white text-[10px] font-bold leading-none">
+                      {displayCount}
                     </span>
                   </div>
                 </div>

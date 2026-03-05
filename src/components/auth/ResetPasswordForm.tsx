@@ -11,9 +11,10 @@ import { CustomButton } from "@/components/common/CustomInputs";
 import { useResetPasswordMutation } from "@/store/api/authApi"; // Adjust path as needed
 
 function ResetPasswordForm() {
+  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState({ password: "", confirmPassword: "" });
+  const [errors, setErrors] = useState({ currentPassword: "", password: "", confirmPassword: "" });
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const router = useRouter();
@@ -42,11 +43,27 @@ function ResetPasswordForm() {
   };
 
   const handleSubmit = async () => {
-    const newErrors = { password: "", confirmPassword: "" };
+    const newErrors = { currentPassword: "", password: "", confirmPassword: "" };
     
+    // Validate current password is filled
+    if (!currentPassword) {
+      newErrors.currentPassword = "Current password is required";
+      toast.error("Current password is required");
+      setErrors(newErrors);
+      return;
+    }
+
     const passwordError = validatePassword(password);
     if (passwordError) {
       newErrors.password = passwordError;
+    }
+
+    // Check if new password is same as current password
+    if (password && currentPassword && password === currentPassword) {
+      newErrors.password = "New password cannot same as Current password";
+      setErrors(newErrors);
+      toast.error("New password cannot same as Current password");
+      return;
     }
 
     if (!confirmPassword) {
@@ -99,10 +116,18 @@ function ResetPasswordForm() {
   return (
     <div className="my-6 flex flex-col gap-4">
       <PasswordInput
+        text={currentPassword}
+        setText={setCurrentPassword}
+        Icon={passwordIcon}
+        placeholder="Enter Current Password"
+        error={errors.currentPassword}
+      />
+
+      <PasswordInput
         text={password}
         setText={setPassword}
         Icon={passwordIcon}
-        placeholder="Enter Password"
+        placeholder="Enter New Password"
         error={errors.password}
       />
 
@@ -110,13 +135,11 @@ function ResetPasswordForm() {
         text={confirmPassword}
         setText={setConfirmPassword}
         Icon={passwordIcon}
-        placeholder="Enter Confirm Password"
+        placeholder="Confirm New Password"
         error={errors.confirmPassword}
       />
 
-      <CustomButton className="mt-4 mb-3" onClick={handleSubmit} 
-      // disabled={isLoading}
-      >
+      <CustomButton className="mt-4 mb-3" onClick={handleSubmit} disabled={isLoading}>
         {isLoading ? "Resetting..." : "Save & Continue"}
       </CustomButton>
     </div>

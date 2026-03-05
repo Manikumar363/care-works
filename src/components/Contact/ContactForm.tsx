@@ -37,9 +37,12 @@ const ContactForm: React.FC = () => {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
     
+    // For name field, remove any numbers
+    const sanitizedValue = name === "name" ? value.replace(/[0-9]/g, "") : value;
+    
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: sanitizedValue,
     }));
   };
 

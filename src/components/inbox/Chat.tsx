@@ -13,9 +13,6 @@ interface Props {
   otherUserDetails?: { name: string; avatar: string | null };
 }
 
-// CDN base for relative avatar paths
-const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
-
 // Group messages by date
 function groupMessagesByDate(messages: chatMessageType[]) {
   const groups: Record<string, chatMessageType[]> = {};
@@ -35,11 +32,8 @@ const Chat = ({ messages, otherUserDetails }: Props) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const myAvatar = useAppSelector((s) => s.profile.avatar);
 
-  const myResolvedAvatar = myAvatar
-    ? myAvatar.startsWith("http")
-      ? myAvatar
-      : `${cdnURL}/${myAvatar.replace(/^\/+/, "")}`
-    : null;
+  // Avatar is already a full URL from Redux (constructed in Messages component)
+  const displayAvatar = myAvatar || ProfilePic;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -86,7 +80,7 @@ const Chat = ({ messages, otherUserDetails }: Props) => {
                   url={
                     isOther
                       ? "/admin.png"
-                      : myResolvedAvatar || ProfilePic
+                      : displayAvatar
                   }
                   alt={isOther ? otherUserDetails?.name || "Admin" : "You"}
                   className="!w-8 !h-8 sm:!w-10 sm:!h-10 rounded-full"
