@@ -2,9 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import DP from "@/components/common/DP";
-import user1ProfilePic from "@/assets/profilepic1.png";
 import { chatMessageType } from "@/lib/interface-types";
-import ProfilePic from "@/assets/profilepic1.png";
 import { format, isToday, isYesterday } from "date-fns";
 import { useAppSelector } from "@/store/hooks";
 
@@ -33,7 +31,7 @@ const Chat = ({ messages, otherUserDetails }: Props) => {
   const myAvatar = useAppSelector((s) => s.profile.avatar);
 
   // Avatar is already a full URL from Redux (constructed in Messages component)
-  const displayAvatar = myAvatar || ProfilePic;
+  const displayAvatar = myAvatar || "/profile-5.png";
 
   useEffect(() => {
     const container = containerRef.current;
