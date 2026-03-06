@@ -560,7 +560,7 @@ const ScheduleCare = ({
 
     // Use effective values (prop or Redux fallback)
     const effectiveRequiredBy = requiredBy || requiredByRedux;
-    const effectiveZipcode = zipcode || careseekerZipcodeRedux;
+    const effectiveZipcode = zipcode ?? careseekerZipcodeRedux;
 
     // API payload
     const payload: {
@@ -575,7 +575,7 @@ const ScheduleCare = ({
       startDate: formatDateToString(startDate),
       meetingDate: formatDateToString(meetingDate),
       serviceIds: effectiveServiceIds,
-      careseekerZipcode: Number(effectiveZipcode),
+      careseekerZipcode: Number(effectiveZipcode) || 0,
       requiredBy: effectiveRequiredBy,
       weeklySchedule,
       shortlistedCaregiversIds,

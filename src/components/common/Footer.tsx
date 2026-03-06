@@ -119,10 +119,21 @@ const Footer = () => {
   });
 
   // Prepare dynamic social links from API
-  const dynamicSocialLinks: linkItems[] = (footerData?.socialLinks || []).map((social) => ({
-    icons: social.icon,
-    link: social.url,
-  }));
+  const storageBucket = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+  const dynamicSocialLinks: linkItems[] = (footerData?.socialLinks || []).map((social) => {
+    // Check if icon is already a complete URL
+    const isAbsoluteUrl = social.icon.startsWith("http://") || social.icon.startsWith("https://");
+    const iconUrl = isAbsoluteUrl 
+      ? social.icon 
+      : social.icon.startsWith("/")
+        ? storageBucket + social.icon
+        : storageBucket + "/" + social.icon;
+    
+    return {
+      icons: iconUrl,
+      link: social.url,
+    };
+  });
 
   const displayDescription = footerData?.footerDescription || 
     "CareWorks provides compassionate, \n personalized eldercare services that \n support seniors and their families with \n dignity and respect.";

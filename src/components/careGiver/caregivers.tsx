@@ -44,7 +44,8 @@ interface CaregiverFilters {
 
 const CaregiversPage = () => {
   const searchParams = useSearchParams();
-  const zipcode = (searchParams.get("zipcode") || "").trim();
+  const zipcodeFromUrl = searchParams.get("zipcode");
+  const zipcode = (zipcodeFromUrl || "").trim();
   const bookingSuccess = searchParams.get("bookingSuccess") === "true";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -467,7 +468,7 @@ const CaregiversPage = () => {
         // Pass Redux data to ScheduleCare
         serviceIds={serviceIds}
         requiredBy={requiredBy}
-        zipcode={careseekerZipcode ?? undefined}
+        zipcode={zipcodeFromUrl ? Number(zipcodeFromUrl) : careseekerZipcode ?? undefined}
       />
 
       {showSuccessModal && (
