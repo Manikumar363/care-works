@@ -38,6 +38,7 @@ const restrictedPaths = [
   "/location/Spring-TX",
   "/location/Cypress-TX",
   "/location/Pearland-TX",
+  "/transitional-care",
 ];
 
 export async function middleware(request: NextRequest) {

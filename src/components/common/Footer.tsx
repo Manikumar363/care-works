@@ -55,7 +55,7 @@ const link: linkSection[] = [
       { title: "FAQs", link: "/faq" },
       { title: "Privacy Policy", link: "/privacy" },
       { title: "Resources", link: "/resources" },
-      { title: "Transitional Care", link: "/veterans" },
+      { title: "Transitional Care", link: "/transitional-care" },
     ],
   },
 ];
