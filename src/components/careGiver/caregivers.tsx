@@ -57,9 +57,12 @@ const CaregiversPage = () => {
   const [filters, setFilters] = useState<CaregiverFilters>({});
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [sidebarKey, setSidebarKey] = useState(0);
-  const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
-
-  console.log("[CaregiversPage] cdnURL:", cdnURL);
+  const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://")
+    .replace(/\/+$/, "");
 
   const careseekerZipcode = useAppSelector(state => state.booking.careseekerZipcode);
   const serviceIds = useAppSelector(state => state.booking.serviceIds);
@@ -236,15 +239,19 @@ const CaregiversPage = () => {
   }, []); // Empty dependency array - runs once on mount
 
   const mappedCaregiversForCards = caregivers.map(c => {
-    const avatarSrc = c.avatar && c.avatar.trim() !== ""
-      ? c.avatar.startsWith("http")
-        ? c.avatar
-        : c.avatar.startsWith("/")
-        ? cdnURL + c.avatar
-        : cdnURL + "/" + c.avatar
-      : "/profile-5.png";
+    const rawAvatar = (c.avatar || "")
+      .trim()
+      .replace(/^=+/, "")
+      .replace(/^https:\/(?!\/)/i, "https://")
+      .replace(/^http:\/(?!\/)/i, "http://");
 
-    console.log("[CaregiversPage] card avatarSrc:", { id: c.id, rawAvatar: c.avatar, avatarSrc });
+    const avatarSrc = rawAvatar
+      ? rawAvatar.startsWith("http://") || rawAvatar.startsWith("https://")
+        ? rawAvatar
+        : rawAvatar.startsWith("/")
+        ? `${cdnURL}${rawAvatar}`
+        : `${cdnURL}/${rawAvatar}`
+      : "/profile-5.png";
 
     return {
       id: c.id,
@@ -260,15 +267,19 @@ const CaregiversPage = () => {
 
   // When passing data to ScheduleCare component, include Redux data
   const mappedCaregiversForSchedule = selectedCaregivers.map(c => {
-    const avatarSrc = c.avatar && c.avatar.trim() !== ""
-      ? c.avatar.startsWith("http")
-        ? c.avatar
-        : c.avatar.startsWith("/")
-        ? cdnURL + c.avatar
-        : cdnURL + "/" + c.avatar
-      : "/profile-5.png";
+    const rawAvatar = (c.avatar || "")
+      .trim()
+      .replace(/^=+/, "")
+      .replace(/^https:\/(?!\/)/i, "https://")
+      .replace(/^http:\/(?!\/)/i, "http://");
 
-    console.log("[CaregiversPage] schedule avatarSrc:", { id: c.id, rawAvatar: c.avatar, avatarSrc });
+    const avatarSrc = rawAvatar
+      ? rawAvatar.startsWith("http://") || rawAvatar.startsWith("https://")
+        ? rawAvatar
+        : rawAvatar.startsWith("/")
+        ? `${cdnURL}${rawAvatar}`
+        : `${cdnURL}/${rawAvatar}`
+      : "/profile-5.png";
 
     return {
       id: c.id,

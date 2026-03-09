@@ -28,7 +28,17 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
   verifiedIconSrc = "/care-giver/verified.png", // place this in /public
   heightClass,
 }) => {
-  const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+  const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://")
+    .replace(/\/+$/, "");
+  const cleanAvatar = (avatar || "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://");
   // Normalize experience: default to 0, show as "X+ Years"
   let experienceDisplay = "N/A";
   if (
@@ -64,12 +74,12 @@ const CaregiverCard: React.FC<CaregiverProps> = ({
         <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-full flex items-center justify-center">
           <Image
             src={
-              avatar && avatar.trim() !== "" && avatar !== "/profile-5.png"
-                ? avatar.startsWith("http")
-                  ? avatar
-                  : avatar.startsWith("/")
-                  ? `${cdnURL}${avatar}`
-                  : `${cdnURL}/${avatar}`
+              cleanAvatar !== "" && cleanAvatar !== "/profile-5.png"
+                ? cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")
+                  ? cleanAvatar
+                  : cleanAvatar.startsWith("/")
+                  ? `${cdnURL}${cleanAvatar}`
+                  : `${cdnURL}/${cleanAvatar}`
                 : "/profile-5.png"
             }
             alt={name}

@@ -39,8 +39,12 @@ interface CaregiverDetail {
   isBookmarked?: boolean;
 }
 
-const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
-console.log("[CaregiverModal] cdnURL:", cdnURL);
+const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "")
+  .trim()
+  .replace(/^=+/, "")
+  .replace(/^https:\/(?!\/)/i, "https://")
+  .replace(/^http:\/(?!\/)/i, "http://")
+  .replace(/\/+$/, "");
 
 const CaregiverModal: React.FC<CaregiverModalProps> = ({
   isOpen,
@@ -167,16 +171,23 @@ const ModalContent: React.FC<{
     setBookmarked(apiBookmarkState);
   }, [apiBookmarkState, caregiverId]);
 
-  const avatarSrc =
-    caregiver.avatar && typeof caregiver.avatar === "string" && caregiver.avatar.trim() !== ""
-      ? caregiver.avatar.startsWith("http")
-        ? caregiver.avatar
-        : caregiver.avatar.startsWith("/")
-        ? cdnURL + caregiver.avatar
-        : cdnURL + "/" + caregiver.avatar
-      : "/profile-5.png";
+  const cleanAvatar =
+    caregiver.avatar && typeof caregiver.avatar === "string"
+      ? caregiver.avatar
+          .trim()
+          .replace(/^=+/, "")
+          .replace(/^https:\/(?!\/)/i, "https://")
+          .replace(/^http:\/(?!\/)/i, "http://")
+      : "";
 
-  console.log("[CaregiverModal] avatarSrc:", avatarSrc);
+  const avatarSrc =
+    cleanAvatar !== ""
+      ? cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")
+        ? cleanAvatar
+        : cleanAvatar.startsWith("/")
+        ? `${cdnURL}${cleanAvatar}`
+        : `${cdnURL}/${cleanAvatar}`
+      : "/profile-5.png";
 
   const handleBookmark = async () => {
     if (!caregiver.id) return;
