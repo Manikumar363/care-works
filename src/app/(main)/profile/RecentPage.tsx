@@ -22,7 +22,12 @@ import { setSelectedCaregivers, clearBookingState, type SelectedCaregiver } from
 
 const SavedCaregiversPanel = () => {
   const toastContainerId = "profile-toast";
-  const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+  const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://")
+    .replace(/\/+$/, "");
   const { data, isLoading, isError, refetch } = useGetBookmarkedCaregiversQuery();
   const [removeBookmarkedCaregiver] = useBookmarkCaregiverMutation();
   const [selectedCaregiverId, setSelectedCaregiverId] = useState<string | null>(null);
@@ -58,11 +63,15 @@ const SavedCaregiversPanel = () => {
       id: giver.id,
       name: giver.name,
       avatar: giver.avatar
-        ? giver.avatar.startsWith("http")
-          ? giver.avatar
-          : giver.avatar.startsWith("/")
-          ? cdnURL + giver.avatar
-          : cdnURL + "/" + giver.avatar
+        ? (() => {
+            const cleanAvatar = giver.avatar
+              .trim()
+              .replace(/^=+/, "")
+              .replace(/^https:\/(?!\/)/i, "https://")
+              .replace(/^http:\/(?!\/)/i, "http://");
+            if (cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")) return cleanAvatar;
+            return cleanAvatar.startsWith("/") ? `${cdnURL}${cleanAvatar}` : `${cdnURL}/${cleanAvatar}`;
+          })()
         : "/profile-5.png",
       specialty: giver.services.join(", "),
       experience: typeof giver.experience === "string" ? giver.experience : giver.experience ? `${giver.experience} Years` : "0+ Years",
@@ -129,11 +138,15 @@ const SavedCaregiversPanel = () => {
                   name={giver.name}
                   avatar={
                     giver.avatar
-                      ? giver.avatar.startsWith("http")
-                        ? giver.avatar
-                        : giver.avatar.startsWith("/")
-                        ? cdnURL + giver.avatar
-                        : cdnURL + "/" + giver.avatar
+                      ? (() => {
+                          const cleanAvatar = giver.avatar
+                            .trim()
+                            .replace(/^=+/, "")
+                            .replace(/^https:\/(?!\/)/i, "https://")
+                            .replace(/^http:\/(?!\/)/i, "http://");
+                          if (cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")) return cleanAvatar;
+                          return cleanAvatar.startsWith("/") ? `${cdnURL}${cleanAvatar}` : `${cdnURL}/${cleanAvatar}`;
+                        })()
                       : "/profile-5.png"
                   }
                   specialty={giver.services && giver.services.length > 0 ? giver.services.join(", ") : "General care"}
@@ -157,7 +170,17 @@ const SavedCaregiversPanel = () => {
                   .map(giver => ({
                     id: giver.id,
                     name: giver.name,
-                    avatar: giver.avatar ?? "/profile-5.png",
+                    avatar: giver.avatar
+                      ? (() => {
+                          const cleanAvatar = giver.avatar
+                            .trim()
+                            .replace(/^=+/, "")
+                            .replace(/^https:\/(?!\/)/i, "https://")
+                            .replace(/^http:\/(?!\/)/i, "http://");
+                          if (cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")) return cleanAvatar;
+                          return cleanAvatar.startsWith("/") ? `${cdnURL}${cleanAvatar}` : `${cdnURL}/${cleanAvatar}`;
+                        })()
+                      : "/profile-5.png",
                     specialty: giver.services.join(", "),
                     experience: typeof giver.experience === "string" ? giver.experience : giver.experience ? `${giver.experience} Years` : "0+ Years",
                     price: giver.price ? `₹${giver.price}` : "N/A",

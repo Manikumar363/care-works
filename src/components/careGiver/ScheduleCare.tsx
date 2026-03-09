@@ -813,16 +813,34 @@ const ScheduleCare = ({
                   {/* Left side - Avatar and Info */}
                   <div className="flex items-start gap-3 flex-1">
                     <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                      {(() => {
+                        const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "")
+                          .trim()
+                          .replace(/^=+/, "")
+                          .replace(/^https:\/(?!\/)/i, "https://")
+                          .replace(/^http:\/(?!\/)/i, "http://")
+                          .replace(/\/+$/, "");
+
+                        const rawAvatar = c.avatar && c.avatar.trim() !== "/profile-5.png" ? c.avatar : "";
+                        const cleanAvatar = rawAvatar
+                          ? rawAvatar
+                              .trim()
+                              .replace(/^=+/, "")
+                              .replace(/^https:\/(?!\/)/i, "https://")
+                              .replace(/^http:\/(?!\/)/i, "http://")
+                          : "";
+
+                        const avatarSrc = cleanAvatar
+                          ? cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")
+                            ? cleanAvatar
+                            : cleanAvatar.startsWith("/")
+                            ? `${cdnURL}${cleanAvatar}`
+                            : `${cdnURL}/${cleanAvatar}`
+                          : "/profile-5.png";
+
+                        return (
                       <Image
-                        src={
-                          c.avatar && c.avatar.trim() !== "/profile-5.png"
-                            ? c.avatar.startsWith("http")
-                              ? c.avatar
-                              : c.avatar.startsWith("/")
-                              ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + c.avatar
-                              : (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + "/" + c.avatar
-                            : "/profile-5.png"
-                        }
+                        src={avatarSrc}
                         alt={c.name}
                         width={48}
                         height={48}
@@ -835,6 +853,8 @@ const ScheduleCare = ({
                           }
                         }}
                       />
+                        );
+                      })()}
                     </div>
 
                     <div className="flex-1 min-w-0"> {/* Added min-w-0 to prevent overflow */}

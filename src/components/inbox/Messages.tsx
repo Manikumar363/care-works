@@ -24,22 +24,32 @@ function Messages() {
   
   // Fetch profile data to populate avatar in Redux
   const { data: profileData } = useGetProfileQuery();
-  const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+  const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://")
+    .replace(/\/+$/, "");
 
   // Helper function to construct proper avatar URL
   const getAvatarUrl = (avatarPath: string | null | undefined): string | null => {
     if (!avatarPath) return null;
+    const cleanAvatar = avatarPath
+      .trim()
+      .replace(/^=+/, "")
+      .replace(/^https:\/(?!\/)/i, "https://")
+      .replace(/^http:\/(?!\/)/i, "http://");
     
     // If it's already a complete URL, return as is
-    if (avatarPath.startsWith('http://') || avatarPath.startsWith('https://')) {
-      return avatarPath;
+    if (cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")) {
+      return cleanAvatar;
     }
     
     // Clean up the path - remove leading slashes
-    const cleanPath = avatarPath.replace(/^\/+/, '');
+    const cleanPath = cleanAvatar.replace(/^\/+/, "");
     
     // Return the properly constructed URL
-    return `${cdnURL}/${cleanPath}`;
+    return cdnURL ? `${cdnURL}/${cleanPath}` : `/${cleanPath}`;
   };
 
   // Sync fetched profile data to Redux state

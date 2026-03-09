@@ -36,6 +36,30 @@ const apiToUiStatus: Record<string, string> = {
 
 export default function BookingDetails({ booking, isLoading = false }: BookingDetailsProps) {
   const router = useRouter(); // <-- added router
+  const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://")
+    .replace(/\/+$/, "");
+
+  const resolveAvatar = (avatar: string | null | undefined): string => {
+    if (!avatar) return "/profile-5.png";
+    const cleanAvatar = avatar
+      .trim()
+      .replace(/^=+/, "")
+      .replace(/^https:\/(?!\/)/i, "https://")
+      .replace(/^http:\/(?!\/)/i, "http://");
+
+    if (cleanAvatar.startsWith("http://") || cleanAvatar.startsWith("https://")) {
+      return cleanAvatar;
+    }
+
+    return cleanAvatar.startsWith("/")
+      ? `${cdnURL}${cleanAvatar}`
+      : `${cdnURL}/${cleanAvatar}`;
+  };
+
   const [openDeleteDialog, setOpenDialog] = useState(false);
   const [selectedCaregiverId, setSelectedCaregiverId] = useState<string | null>(null);
   const [cancelBooking, { isLoading: isCancelling }] = useCancelBookingMutation();
@@ -377,15 +401,7 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
             >
               <div className="w-16 h-16 rounded-full flex items-center justify-center">
                 <Image
-                  src={
-                    cg.avatar
-                      ? cg.avatar.startsWith("http")
-                        ? cg.avatar
-                        : cg.avatar.startsWith("/")
-                        ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + cg.avatar
-                        : (process.env.NEXT_PUBLIC_STORAGE_BUCKET ?? "") + "/" + cg.avatar
-                      : "/profile-5.png"
-                  }
+                  src={resolveAvatar(cg.avatar)}
                   alt={cg.name ?? "Caregiver"}
                   width={56}
                   height={56}
