@@ -10,7 +10,7 @@ import ScheduleCare from "@/components/careGiver/ScheduleCare";
 import CareRequestFaq from "./CareRequestFaq";
 import Image from "next/image";
 import emptyCaregiverImage from "@/assets/care.svg";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import type { Booking } from "@/types/Booking";
 import { useRouter } from "next/navigation";
 
@@ -243,6 +243,18 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
 
   return (
     <div className="w-full p-3 sm:p-4 md:p-6 lg:p-8 mt-0 lg:mt-3">
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{ zIndex: 9999 }}
+      />
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl text-center lg:text-start sm:text-3xl lg:text-4xl font-semibold text-[var(--navy)] font-Urbanist">
           Recent Care Requests

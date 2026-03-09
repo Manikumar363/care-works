@@ -120,6 +120,18 @@ function Notification({ open, handleOpen }: Props) {
 
   const noNotifications = !isLoading && notifications.length === 0;
 
+  const loadPrevious = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  };
+
+  const loadMore = () => {
+    if (hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
   return (
     <CustomSheet
       open={open}
@@ -193,12 +205,12 @@ function Notification({ open, handleOpen }: Props) {
                 {/* Content */}
                 <div className="flex flex-col flex-1 min-w-0">
                   <div className="flex justify-between items-start">
-                    <div className="text-[0.9rem] font-medium text-gray-900 line-clamp-2">
+                    <div className="text-[0.9rem] font-medium text-gray-900 whitespace-normal break-words">
                       {notification.title}
                     </div>
                   </div>
                   
-                  <div className="text-gray-600 text-sm mt-1">
+                  <div className="text-gray-600 text-sm mt-1 whitespace-normal break-words">
                     {notification.description}
                   </div>
                   
@@ -231,6 +243,24 @@ function Notification({ open, handleOpen }: Props) {
             </div>
           ))}
 
+          {notifications.length > 0 && (page > 1 || hasMore) && (
+            <div className="mt-2 flex gap-2">
+              <button
+                onClick={loadPrevious}
+                disabled={page === 1 || isLoading}
+                className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-center font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Loading..." : "← Previous"}
+              </button>
+              <button
+                onClick={loadMore}
+                disabled={!hasMore || isLoading}
+                className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-center font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Loading..." : "Next →"}
+              </button>
+            </div>
+          )}
           {notifications.length > 0 && !hasMore && (
             <div className="text-center py-4 text-gray-400 text-sm">
               No more notifications

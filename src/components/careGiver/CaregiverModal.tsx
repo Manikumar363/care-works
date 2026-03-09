@@ -40,6 +40,7 @@ interface CaregiverDetail {
 }
 
 const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+console.log("[CaregiverModal] cdnURL:", cdnURL);
 
 const CaregiverModal: React.FC<CaregiverModalProps> = ({
   isOpen,
@@ -174,6 +175,8 @@ const ModalContent: React.FC<{
         ? cdnURL + caregiver.avatar
         : cdnURL + "/" + caregiver.avatar
       : "/profile-5.png";
+
+  console.log("[CaregiverModal] avatarSrc:", avatarSrc);
 
   const handleBookmark = async () => {
     if (!caregiver.id) return;

@@ -57,6 +57,9 @@ const CaregiversPage = () => {
   const [filters, setFilters] = useState<CaregiverFilters>({});
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [sidebarKey, setSidebarKey] = useState(0);
+  const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+
+  console.log("[CaregiversPage] cdnURL:", cdnURL);
 
   const careseekerZipcode = useAppSelector(state => state.booking.careseekerZipcode);
   const serviceIds = useAppSelector(state => state.booking.serviceIds);
@@ -232,38 +235,50 @@ const CaregiversPage = () => {
     };
   }, []); // Empty dependency array - runs once on mount
 
-  const mappedCaregiversForCards = caregivers.map(c => ({
-    id: c.id,
-    name: c.name,
-    avatar: c.avatar && c.avatar.trim() !== ""
+  const mappedCaregiversForCards = caregivers.map(c => {
+    const avatarSrc = c.avatar && c.avatar.trim() !== ""
       ? c.avatar.startsWith("http")
         ? c.avatar
         : c.avatar.startsWith("/")
-        ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + c.avatar
-        : (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + "/" + c.avatar
-      : "/profile-5.png",
-    specialty: c.services.join(", "),
-    experience: `${c.experience} Years`,
-    price: c.price ? `$${c.price}/hr` : "N/A",
-    isBookmarked: c.isBookmarked ?? false,
-    verified: c.verified ?? false,
-  }));
+        ? cdnURL + c.avatar
+        : cdnURL + "/" + c.avatar
+      : "/profile-5.png";
+
+    console.log("[CaregiversPage] card avatarSrc:", { id: c.id, rawAvatar: c.avatar, avatarSrc });
+
+    return {
+      id: c.id,
+      name: c.name,
+      avatar: avatarSrc,
+      specialty: c.services.join(", "),
+      experience: `${c.experience} Years`,
+      price: c.price ? `$${c.price}/hr` : "N/A",
+      isBookmarked: c.isBookmarked ?? false,
+      verified: c.verified ?? false,
+    };
+  });
 
   // When passing data to ScheduleCare component, include Redux data
-  const mappedCaregiversForSchedule = selectedCaregivers.map(c => ({
-    id: c.id,
-    name: c.name,
-    avatar: c.avatar && c.avatar.trim() !== ""
+  const mappedCaregiversForSchedule = selectedCaregivers.map(c => {
+    const avatarSrc = c.avatar && c.avatar.trim() !== ""
       ? c.avatar.startsWith("http")
         ? c.avatar
         : c.avatar.startsWith("/")
-        ? (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + c.avatar
-        : (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "") + "/" + c.avatar
-      : "/profile-5.png",
-    specialty: c.services.join(", "),
-    experience: `${c.experience} Years`,
-    price: c.price ? `$${c.price}/hr` : "N/A",
-  }));
+        ? cdnURL + c.avatar
+        : cdnURL + "/" + c.avatar
+      : "/profile-5.png";
+
+    console.log("[CaregiversPage] schedule avatarSrc:", { id: c.id, rawAvatar: c.avatar, avatarSrc });
+
+    return {
+      id: c.id,
+      name: c.name,
+      avatar: avatarSrc,
+      specialty: c.services.join(", "),
+      experience: `${c.experience} Years`,
+      price: c.price ? `$${c.price}/hr` : "N/A",
+    };
+  });
 
   useEffect(() => {
     if (bookingSuccess) {

@@ -75,9 +75,9 @@ const NeedService: React.FC = () => {
     setSubmitting(true);
     dispatch(setRequiredBy(selected)); // Store requiredBy in redux
     
-    // If coming from saved caregivers flow, redirect back to saved-caregiver page with schedule modal
+    // If coming from saved caregivers flow, redirect back to profile page with schedule modal
     if (hasSelectedCaregivers) {
-      router.push('/saved-caregiver?openSchedule=true');
+      router.push('/profile?tab=saved-caregivers&openSchedule=true');
     } else {
       // Normal flow - go to caregiver search
       router.push("/care-giver");

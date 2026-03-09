@@ -475,7 +475,7 @@ const ScheduleCare = ({
       const payload: {
         startDate: string;
         meetingDate: string;
-        endDate?: string;
+        endDate?: string | null;
         weeklySchedule: { weekDay: number; startTime: string; endTime: string }[];
       } = {
         startDate: formatDateToString(startDate),
@@ -483,11 +483,9 @@ const ScheduleCare = ({
         weeklySchedule,
       };
 
-      // Only include endDate if it has a valid value
+      // Always include endDate - either the formatted date or null
       const formattedEndDate = formatDateToString(endDate);
-      if (formattedEndDate) {
-        payload.endDate = formattedEndDate;
-      }
+      payload.endDate = formattedEndDate || null;
 
       try {
         if (bookingId) {
@@ -924,7 +922,7 @@ const ScheduleCare = ({
                 <DatePicker
                   selected={endDate}
                   onChange={(date) => setEndDate(date)}
-                  minDate={startDate || new Date()} // End date must be >= service start date
+                  minDate={startDate && startDate > new Date() ? startDate : new Date()} // Disable past dates, end date must be >= today or start date
                   dateFormat="MM/dd/yyyy"
                   placeholderText="Select Date"
                   popperClassName="!z-[9999]"
