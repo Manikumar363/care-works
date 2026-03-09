@@ -47,7 +47,12 @@ const CARE_RECIPIENT_OPTIONS = [
 
 export default function ManageProfile() {
   const dispatch = useDispatch();
-  const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+  const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://")
+    .replace(/\/+$/, "");
   
   const { data: profile, isLoading: isFetching } = useGetProfileQuery();
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
@@ -93,11 +98,16 @@ export default function ManageProfile() {
   // Helper function to construct proper avatar URL
   const getAvatarUrl = (avatarPath: string | null | undefined): string | null => {
     if (!avatarPath) return null;
-    if (avatarPath.startsWith('http://') || avatarPath.startsWith('https://')) {
-      return avatarPath;
+    const cleanAvatar = avatarPath
+      .trim()
+      .replace(/^=+/, "")
+      .replace(/^https:\/(?!\/)/i, "https://")
+      .replace(/^http:\/(?!\/)/i, "http://");
+    if (cleanAvatar.startsWith('http://') || cleanAvatar.startsWith('https://')) {
+      return cleanAvatar;
     }
-    const cleanPath = avatarPath.replace(/^\/+/, '');
-    return `${cdnURL}/${cleanPath}`;
+    const cleanPath = cleanAvatar.replace(/^\/+/, '');
+    return cdnURL ? `${cdnURL}/${cleanPath}` : `/${cleanPath}`;
   };
 
   useEffect(() => {

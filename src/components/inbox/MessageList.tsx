@@ -42,7 +42,12 @@ function MessageList({ handleOpenMessages }: Props) {
     }
   };
 
-  const cdnURL = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "";
+  const cdnURL = (process.env.NEXT_PUBLIC_STORAGE_BUCKET || "")
+    .trim()
+    .replace(/^=+/, "")
+    .replace(/^https:\/(?!\/)/i, "https://")
+    .replace(/^http:\/(?!\/)/i, "http://")
+    .replace(/\/+$/, "");
 
   // Filter chats by search
   const filteredChats = search
@@ -90,9 +95,20 @@ function MessageList({ handleOpenMessages }: Props) {
                       <DP
                         url={
                           chat?.profilePic
-                            ? chat.profilePic.startsWith("http")
-                              ? chat.profilePic
-                              : `${cdnURL}/${chat.profilePic.replace(/^\/+/, "")}`
+                            ? (() => {
+                                const cleanPic = String(chat.profilePic)
+                                  .trim()
+                                  .replace(/^=+/, "")
+                                  .replace(/^https:\/(?!\/)/i, "https://")
+                                  .replace(/^http:\/(?!\/)/i, "http://");
+
+                                if (cleanPic.startsWith("http://") || cleanPic.startsWith("https://")) {
+                                  return cleanPic;
+                                }
+
+                                const cleanPath = cleanPic.replace(/^\/+/, "");
+                                return cdnURL ? `${cdnURL}/${cleanPath}` : `/${cleanPath}`;
+                              })()
                             : ProfilePic
                         }
                         alt={chat?.name}
