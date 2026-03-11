@@ -49,9 +49,12 @@ export default async function LocationTemplate({ slug }: LocationTemplateProps) 
   let data: LocationServiceData | null = null;
   if (API_BASE && slug) {
     try {
-      const [cityPart, statePart] = slug.split("-");
-      if (cityPart && statePart) {
-        const city = decodeURIComponent(cityPart);
+      const slugParts = slug.split("-").filter(Boolean);
+      const statePart = slugParts.at(-1);
+      const cityParts = slugParts.slice(0, -1);
+
+      if (statePart && cityParts.length > 0) {
+        const city = decodeURIComponent(cityParts.join(" "));
         const state = decodeURIComponent(statePart).toUpperCase();
         const endpoint = `${API_BASE.replace(/\/$/, "")}/api/v1/location-services/city/${encodeURIComponent(city)}/state/${encodeURIComponent(state)}`;
         const res = await fetch(endpoint, { cache: "no-store" });

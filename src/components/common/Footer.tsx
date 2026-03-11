@@ -245,8 +245,8 @@ const Footer = () => {
           </div>
         </div> */}
         <div>
-          <h1 className="font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[80px] xl:text-[135px] text-gray-400/30 tracking-widest sm:mt-0 mt-0">
-            CAREWORKS
+          <h1 className="font-bold text-[27px] sm:text-4xl md:text-6xl lg:text-[72px] xl:text-[100px] text-gray-400/30 tracking-wide whitespace-nowrap sm:mt-0 mt-0">
+            CAREWORKS HOUSTON
           </h1>
         </div>
       </div>

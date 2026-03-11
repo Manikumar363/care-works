@@ -190,7 +190,7 @@ const SavedCaregiversPanel = () => {
                 dispatch(setSelectedCaregivers(caregiverData));
                 
                 // Redirect to service selection page (find-job)
-                router.push("/find-job");
+                router.push("/browse-caregivers");
               }}
               className={`w-full px-8 sm:px-12 cursor-pointer py-3 sm:py-4 text-[var(--navy)] text-base sm:text-xl bg-yellow-500 rounded-full font-semibold transition
                 ${selectedCaregiverIds.length >= 1 ? "hover:shadow-md" : "cursor-not-allowed opacity-50"}`}

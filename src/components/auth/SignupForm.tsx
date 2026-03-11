@@ -71,7 +71,7 @@ function SignupForm() {
         return /^\d{10}$/.test(digits) ? "" : "Phone must be 10 digits";
       }
       case "address":
-        return value.trim() ? "" : "Address is required";
+        return value.trim() ? "" : "Service address is required";
       case "city":
         return value.trim() ? "" : "City is required";
       case "zipCode":
@@ -159,7 +159,10 @@ function SignupForm() {
       if (response?.data?.userId) {
         Cookies.set("userId", response.data.userId, { expires: 1 / 24 });
         toast.success("Account successfully Created");
-        toast.info(`OTP sent to ${email.trim()}`);
+        sessionStorage.setItem(
+          "postSignupOtpToast",
+          `OTP sent to ${email.trim()}`
+        );
         // Add a delay before redirecting to ensure user sees the success message
         setTimeout(() => {
           router.push("/email-verification");

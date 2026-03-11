@@ -14,7 +14,7 @@ const restrictedPaths = [
   "/care-provider",
   "/contact",
   "/zip-code",
-  "/find-job",
+  "/browse-caregivers",
   "/need-service",
   "/aboutUs",
   "/privacy",
@@ -50,6 +50,7 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/static") ||
+    pathname.startsWith("/location") ||
     pathname.endsWith(".png") ||
     pathname.endsWith(".jpg") ||
      pathname.endsWith(".svg") ||

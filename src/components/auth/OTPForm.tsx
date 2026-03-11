@@ -53,12 +53,13 @@ function OTPForm({ isEmailVerify }: Props) {
           Cookies.set("authToken", res.data.accessToken, { expires: 1 }); // 1 day
           Cookies.set("refreshToken", res.data.refreshToken, { expires: 7 }); // 7 days
           Cookies.remove("userId");
-          router.push("/"); // Redirect to dashboard or home page
+          sessionStorage.setItem("postSignupSuccessToast", "Account successfully Created");
+          setTimeout(() => router.push("/"), 1500); // Delay so user sees the toast
         } else {
           // For password reset flow
           console.log("Password reset successful");
           Cookies.set("resetToken", res.data.token || "", { expires: 1/24 }); // 1 hour
-          router.push("/reset-password");
+          setTimeout(() => router.push("/reset-password"), 1500);
         }
       } else {
         toast.error("Verification failed.");
@@ -103,6 +104,14 @@ function OTPForm({ isEmailVerify }: Props) {
     toast.error("Failed to resend OTP. Try again.");
   }}
   };
+
+  useEffect(() => {
+    const pendingToast = sessionStorage.getItem("postSignupOtpToast");
+    if (pendingToast) {
+      toast.success(pendingToast);
+      sessionStorage.removeItem("postSignupOtpToast");
+    }
+  }, []);
 
   useEffect(() => {
     if (time === 0) return; // Stop when timer reaches 0

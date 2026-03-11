@@ -321,6 +321,11 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
               apiToUiStatus[apiStatus] ||
               booking.status ||
               "Unknown";
+            const displayStatus =
+              selectedStatus === "Active" &&
+              (apiStatus === "accepted" || apiStatus === "active")
+                ? "Active"
+                : uiStatus;
 
             return (
               <div
@@ -362,7 +367,7 @@ const RightBookingsPanel: FC<RightBookingsPanelProps> = ({
                         statusColor[apiStatus] || "bg-gray-200 text-gray-700"
                       }`}
                     >
-                      {uiStatus}
+                      {displayStatus}
                     </div>
                   </div>
                 </div>

@@ -79,6 +79,7 @@ export const {
   useGetNotificationsQuery,
   useGetUnreadCountQuery,
   useMarkAsReadMutation,
+  useMarkAllAsReadMutation,
   useLazyGetNotificationsQuery,
   useDeleteNotificationMutation,
   useClearAllNotificationsMutation,

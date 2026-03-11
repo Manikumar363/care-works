@@ -156,28 +156,13 @@ const NeedService: React.FC = () => {
             }`}
           >
             {submitting ? (
-              <>
-                <svg
-                  role="status"
-                  className="w-4 h-4 text-white animate-spin"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M50 100.795C77.6142 100.795 100 78.409 100 50.795C100 23.1809 77.6142 0.795898 50 0.795898C22.3858 0.795898 0 23.1809 0 50.795C0 78.409 22.3858 100.795 50 100.795Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M93.9706 50.795C93.9706 76.0491 76.0491 93.9706 50.795 93.9706C25.5409 93.9706 7.61938 76.0491 7.61938 50.795C7.61938 25.5409 25.5409 7.61938 50.795 7.61938C76.0491 7.61938 93.9706 25.5409 93.9706 50.795Z"
-                    stroke="white"
-                    strokeWidth="8.33333"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
                 </svg>
                 Loading...
-              </>
+              </span>
             ) : (
               "Next"
             )}

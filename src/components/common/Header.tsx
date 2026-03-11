@@ -23,6 +23,16 @@ export interface NavbarTypes {
   path?: string;
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BASE_URL || "";
+
+const defaultLocationMenu: NavbarTypes[] = [
+  { title: "Sugar Land, TX", link: "/location/Sugar-Land-TX" },
+  { title: "Cypress, TX", link: "/location/Cypress-TX" },
+  { title: "Spring, TX", link: "/location/Spring-TX" },
+  { title: "Katy, TX", link: "/location/Katy-TX" },
+  { title: "Pearland, TX", link: "/location/Pearland-TX" },
+];
+
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [openNotifications, setOpenNotifications] = useState(false);
@@ -30,6 +40,7 @@ const Header = () => {
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
   const [mobileLoginDropdownOpen, setMobileLoginDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [locationMenuItems, setLocationMenuItems] = useState<NavbarTypes[]>(defaultLocationMenu);
   const navRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
@@ -71,6 +82,38 @@ const Header = () => {
   useEffect(() => {
     setIsLoggedIn(isValidToken);
   }, [isValidToken]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      if (!API_BASE) return;
+
+      try {
+        const endpoint = `${API_BASE.replace(/\/$/, "")}/api/v1/footer`;
+        const res = await fetch(endpoint);
+
+        if (!res.ok) return;
+
+        const json = await res.json();
+        const locations = json?.data?.footer?.locations;
+
+        if (!Array.isArray(locations) || locations.length === 0) return;
+
+        const dynamicLocations = locations.map((loc: string) => {
+          const cleaned = loc.replace(/,/g, "").trim().replace(/\s+/g, "-");
+          return {
+            title: loc,
+            link: `/location/${cleaned}`,
+          };
+        });
+
+        setLocationMenuItems(dynamicLocations);
+      } catch {
+        // Keep fallback locations when the API is unavailable.
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   useEffect(() => {
     setOpenDropdownIndex(null);
@@ -123,13 +166,7 @@ const Header = () => {
     },
     {
       title: "Locations",
-      services: [
-        { title: "Sugarland, TX", link: "/location/Sugarland-TX" },
-        { title: "Cypress, TX", link: "/location/Cypress-TX" },
-        { title: "Spring, TX", link: "/location/Spring-TX" },
-        { title: "Katy, TX", link: "/location/Katy-TX" },
-        { title: "Pearland, TX", link: "/location/Pearland-TX" },
-      ],
+      services: locationMenuItems,
     },
     { title: "Blogs", link: "/blogs" },
   ];

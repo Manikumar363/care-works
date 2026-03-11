@@ -308,7 +308,7 @@ export const BrowseCaregiver = ({ noDescription, title, description }: Props) =>
     if (pathname === "/care-giver") {
       return;
     } else {
-      router.push("/find-job");
+      router.push("/browse-caregivers");
     }
   }
 

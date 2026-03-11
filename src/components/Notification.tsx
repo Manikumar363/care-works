@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 
 import CustomSheet from "./common/CustomSheet";
 import { noNotificationIcon, Bookingnoty } from "@/lib/svg_icons";
-import { useGetNotificationsQuery, useMarkAsReadMutation, useGetUnreadCountQuery, useDeleteNotificationMutation, useClearAllNotificationsMutation  } from "../store/api/notificationApi";
+import { useGetNotificationsQuery, useMarkAsReadMutation, useMarkAllAsReadMutation, useGetUnreadCountQuery, useDeleteNotificationMutation, useClearAllNotificationsMutation  } from "../store/api/notificationApi";
 import { useSocket } from "@/hooks/use-socket";
 import { Notification as NotificationType } from "../lib/types/notification";
 import { Trash2Icon } from "lucide-react";
@@ -34,6 +34,7 @@ function Notification({ open, handleOpen }: Props) {
   const { onNewNotification } = useSocket(token);
   const [deleteNotification] = useDeleteNotificationMutation();
   const [clearAllNotifications] = useClearAllNotificationsMutation();
+  const [markAllAsRead] = useMarkAllAsReadMutation();
   const unreadCount = unreadCountData?.data?.unreadCount || 0;
   // Format count for display (show 99+ if over 99)
   const displayCount = unreadCount > 99 ? '99+' : unreadCount.toString();
@@ -277,12 +278,16 @@ function Notification({ open, handleOpen }: Props) {
         {notifications.length > 0 && (
           <div className="mt-auto px-3 pb-2 pt-4 flex gap-2">
             <button
-              onClick={() => {
-                notifications.forEach(notif => {
-                  if (!notif.isRead) {
-                    handleMarkAsRead(notif.id);
-                  }
-                });
+              onClick={async () => {
+                try {
+                  await markAllAsRead().unwrap();
+                  setNotifications((prev) =>
+                    prev.map((notif) => ({ ...notif, isRead: true, readAt: new Date().toISOString() }))
+                  );
+                  refetchUnreadCount();
+                } catch {
+                  toast.error('Failed to mark all as read.', { position: 'top-left' });
+                }
               }}
               className="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
             >

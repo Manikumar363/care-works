@@ -42,7 +42,7 @@ const ZipCodePage: React.FC = () => {
     if (Number(cleanZip) === 0) return;
     setIsLoading(true);
     dispatch(setCareseekerZipcode(Number(cleanZip))); // Store in redux
-    router.push("/find-job"); // Redirect to /find-job
+    router.push("/browse-caregivers"); // Redirect to /find-job
   }
 
   const careseekerZipcode = useAppSelector(
