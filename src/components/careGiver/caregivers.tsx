@@ -327,7 +327,7 @@ const CaregiversPage = () => {
           <FilterSidebar 
             key={sidebarKey}
             onFilterChange={handleFilterChange}
-            initialFilters={{}} // Always empty unless restoring from saved state
+            initialFilters={filters}
             isLoading={isLoading}
           />
         </div>
@@ -342,7 +342,7 @@ const CaregiversPage = () => {
             <FilterSidebar
               key={sidebarKey}
               onFilterChange={handleFilterChange}
-              initialFilters={{}}
+              initialFilters={filters}
               isLoading={isLoading}
             />
           </CustomSheet>

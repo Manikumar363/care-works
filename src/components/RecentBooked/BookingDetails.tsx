@@ -263,7 +263,7 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
             Recent Care Request / <span className="text-[#2F3C51]">#{booking.bookingId}</span>
           </h2>
           <div className="flex gap-2 ml-2 sm:gap-4 items-center">
-            {/* Booking Status Badge - Hide for cancelled bookings */}
+            {/* Booking Status Badge - Hide for cancelled bookings 
             {booking.status !== "cancelled" && booking.status !== "canceled" && (
               <span
                 className={`px-4 py-2 rounded-full text-sm font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.06)] whitespace-nowrap ${
@@ -272,7 +272,7 @@ export default function BookingDetails({ booking, isLoading = false }: BookingDe
               >
                 {apiToUiStatus[booking.status?.toLowerCase?.() || ""] || booking.status || "Unknown"}
               </span>
-            )}
+            )}*/}
 
             {/* Hide Edit button for completed or cancelled bookings */}
             {booking.status !== "completed" &&

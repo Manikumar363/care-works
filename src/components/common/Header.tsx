@@ -151,7 +151,6 @@ const Header = () => {
         { title: "FAQ", link: "/faq" },
       ],
     },
-    { title: "Become A Caregiver", link: "/care-provider" },
     {
       title: "Services",
       services: [
@@ -169,6 +168,7 @@ const Header = () => {
       services: locationMenuItems,
     },
     { title: "Blogs", link: "/blogs" },
+    { title: "Become A Caregiver", link: "/care-provider" },
   ];
 
   if (!isLoggedInUser) {
