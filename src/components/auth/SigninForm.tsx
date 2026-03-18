@@ -36,6 +36,16 @@ function SigninForm() {
     setRememberMe(savedRememberMe);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const resetStatus = params.get("reset");
+    if (resetStatus === "success") {
+      toast.success("Password Updated Successfully");
+      router.replace("/signin");
+    }
+  }, [router]);
+
   const getEmailSuggestions = () => {
     if (!email || !email.includes("@")) return [];
     

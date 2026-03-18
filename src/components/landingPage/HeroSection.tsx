@@ -7,6 +7,7 @@ import Image from "next/image";
 import { DesignIcon1, DesignIcon2, DesignIcon3, PhoneIcon, ArrowIcon } from "../icons/page";
 import RippleRadio from "../common/RippleRadio";
 import { toast } from "react-toastify";
+import RippleRadio2 from "../common/RippleRadio2";
 
 type HeroSectionData = {
   heading: string;
@@ -138,20 +139,49 @@ const HeroSection = () => {
           <DesignIcon3 />
         </div>
 
-        {/* Floating phone badge - desktop only */}
-        <a
-          href={`tel:${heroData?.phoneNumber || "8322372273"}`}
-          className="hidden lg:flex mt-2.5 items-center gap-4 rounded-full bg-[#F2E9CE] text-[#233D4D] px-10 py-3 text-lg lg:text-lg font-extrabold shadow-md absolute top-1 right-8 z-30"
-        >
-          
-          <RippleRadio />
-          <PhoneIcon className="w-5 h-5 lg:w-6 lg:h-6" />
-          <span>{heroData?.phoneNumber || "832-237-2273"}</span>
-        </a>
+        {/* Floating phone badge + Contact Us button - desktop only */}
+        <div className="hidden lg:flex flex-col items-end gap-3 mt-2.5 absolute top-1 right-8 z-30">
+          <a
+            href={`tel:${heroData?.phoneNumber || "8322372273"}`}
+            className="flex items-center gap-4 rounded-full bg-[#F2E9CE] text-[#233D4D] px-10 py-3 text-lg font-extrabold shadow-md"
+          >
+            <RippleRadio />
+            <PhoneIcon className="w-5 h-5 lg:w-6 lg:h-6" />
+            <span>{heroData?.phoneNumber || "832-237-2273"}</span>
+          </a>
+          <button
+            type="button"
+            onClick={() => window.location.href = '/contact'}
+            className="px-7 py-3 cursor-pointer text-lg rounded-4xl font-semibold flex items-center gap-2 bg-[var(--yellow)] text-[var(--navy)] hover:bg-[var(--yellow-light)] transition-all duration-300 ease-in-out shadow-md"
+          >
+            <RippleRadio2 />
+            <span>Contact Us</span>
+            <ArrowIcon className="w-6 h-6 ml-2" />
+          </button>
+        </div>
+
+        {/* Centered Google Reviews badge - desktop only */}
+        <div className="hidden lg:block absolute left-1/2 top-[28%] -translate-x-1/2 -translate-y-1/2 z-20">
+          <a
+            href={googleReviewLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block"
+          >
+            <Image
+              src="/google-reviews-badge.png"
+              alt="5.0 rating - 20+ Google Reviews"
+              width={270}
+              height={60}
+              className="h-auto w-[250px] object-contain"
+              priority
+            />
+          </a>
+        </div>
 
         {/* Main content - desktop: absolute positioned, mobile: relative */}
         <div className="relative lg:absolute lg:left-28 lg:top-[2%] px-4 sm:px-8 lg:px-0 pt-12 lg:pt-0 text-white lg:w-[1050px]">
-          <h1 className="font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-center lg:text-left">
+          <h1 className="font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-7xl leading-tight text-center lg:text-left">
             Fast Dependable
             <br className="mb-1" />
             <span className="relative inline-block">
@@ -200,7 +230,7 @@ const HeroSection = () => {
               href={googleReviewLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block"
+              className="inline-block lg:hidden"
             >
               <Image
                 src="/google-reviews-badge.png"
@@ -214,7 +244,7 @@ const HeroSection = () => {
             <button
               type="button"
               onClick={() => window.location.href = '/contact'}
-              className="px-8 py-4 sm:px-7 sm:py-6 cursor-pointer lg:px-8 lg:py-4 mb-4 text-md sm:text-base lg:text-lg rounded-4xl font-semibold flex items-center gap-2 bg-[var(--yellow)] text-[var(--navy)] hover:bg-[var(--yellow-light)] transition-all duration-300 ease-in-out shadow-md"
+              className="lg:hidden px-8 py-4 sm:px-7 sm:py-6 cursor-pointer mb-4 text-md sm:text-base rounded-4xl font-semibold flex items-center gap-2 bg-[var(--yellow)] text-[var(--navy)] hover:bg-[var(--yellow-light)] transition-all duration-300 ease-in-out shadow-md"
             >
               <span>Contact Us</span>
               <ArrowIcon className="w-6 h-6 ml-2" />

@@ -76,16 +76,13 @@ function ResetPasswordForm() {
     }
 
     try {
-      const res = await resetPassword({
+      await resetPassword({
         password,
         role: "user", // change to "giver" if needed
       }).unwrap();
 
-      toast.success("Password Updated Successfully");
-      // Add a slight delay before redirecting to ensure user sees the success message
-      setTimeout(() => {
-        router.push("/signin");
-      }, 1500);
+      // Route with a success flag so toast can reliably render on sign-in page.
+      router.push("/signin?reset=success");
     }catch (err: unknown) {
   if (typeof err === "object" && err !== null && "data" in err) {
     const errorData = err as { data?: { message?: string } };
