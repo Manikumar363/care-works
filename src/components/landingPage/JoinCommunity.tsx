@@ -21,7 +21,7 @@ const JoinCommunity = () => {
         <YellowButton
           className="px-10 sm:px-8 py-6 sm:py-8 lg:py-7 text-sm sm:text-base lg:text-lg"
           onClick={() =>
-            window.open("https://caregiver.careworks.biz/signup")
+            window.open("https://caregiver.careworks.biz/signin")
           }
         >
           Join our cool community as a Caregiver
