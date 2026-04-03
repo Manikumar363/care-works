@@ -69,7 +69,7 @@ const IntroductionWithCTA = () => {
         </div>
 
         <div className="max-w-3xl">
-          <Link href="https://caregiver.careworks.biz/signup" target="_blank" rel="noopener noreferrer">
+          <Link href="https://caregiver.careworks.biz/signin" target="_blank" rel="noopener noreferrer">
             <YellowButton className="px-14 py-7 text-xl">Register now</YellowButton>
           </Link>
         </div>
