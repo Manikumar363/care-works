@@ -1,8 +1,7 @@
 import FAQ from "@/components/careProvider/FAQ";
-import HeroSectionCareProvider from "@/components/careProvider/HeroSectionCareProvider";
 import IntroductionWithCTA from "@/components/careProvider/IntroductionWithCTA";
 import PerkOfCareProvider from "@/components/careProvider/PerkOfCareProvider";
-import RegisterAsCareProvider from "@/components/careProvider/RegisterAsCareProvider";
+import RegisterAsCareProviderDialog from "../../../components/careProvider/RegisterAsCareProviderDialog";
 import TestimonialCareProvider from "@/components/careProvider/TestimonialCareProvider";
 import HeroSectionProtected from "@/components/common/HeroSectionProtected";
 import React from "react";
@@ -14,12 +13,13 @@ export const metadata = {
 const page = () => {
   return (
     <>
+      <RegisterAsCareProviderDialog />
       <HeroSectionProtected title="Become A Caregiver" />
       <IntroductionWithCTA />
       <PerkOfCareProvider />
       <TestimonialCareProvider />
       <FAQ />
-      <RegisterAsCareProvider />
+      {/* <RegisterAsCareProvider /> */}
     </>
   );
 };

@@ -49,7 +49,6 @@ const RegisterAsCareProvider = () => {
       toast.error(msg);
     }
     if (!description.trim()) newErrors.description = "Description is required.";
-    if (!resume.trim()) newErrors.resume = "Resume/Document is required.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -196,7 +195,7 @@ const RegisterAsCareProvider = () => {
           </div>
         </div>
       )}
-      <div className="relative w-full h-[550px] sm:h-[650px] lg:min-h-[1320px] lg:min-w-1/2">
+      {/* <div className="relative w-full h-[550px] sm:h-[650px] lg:min-h-[1320px] lg:min-w-1/2"> 
         <Image
           src={"/register-care-provider.jpg"}
           alt="faq"
@@ -204,11 +203,11 @@ const RegisterAsCareProvider = () => {
           className="md:object-[55%_20%] object-cover"
           style={{ objectFit: "cover" }}
         />
-      </div>
+      </div>*/}
       <div className="lg:px-20 px-8 lg:py-20 py-12 flex justify-center bg-[var(--whiteSmoke)] lg:min-w-1/2 w-full">
         <div>
-          <h1 className="text-4xl font-semibold  text-[var(--navy)]">
-            Start Caring, Start Earning –  <br />Register as a Caregiver Now
+          <h1 className="text-2xl font-semibold  text-[var(--navy)]">
+            Start Caring, Start Earning – Register as a Caregiver Now
           </h1>
 
           <form className="mt-8" onSubmit={handleSubmit} noValidate>

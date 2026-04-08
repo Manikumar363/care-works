@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { YellowButton } from "../common/CustomButton";
-import Link from "next/link";
 import Image from "next/image";
 
 const IntroductionWithCTA = () => {
@@ -39,6 +38,10 @@ const IntroductionWithCTA = () => {
     fetchBecomeCaregiver();
   }, []);
 
+  const handleRegisterNowClick = () => {
+    window.dispatchEvent(new Event("open-register-care-provider-dialog"));
+  };
+
   return (
     <div className="flex lg:flex-row flex-col justify-around gap-y-10 relative bg-[var(--whiteSmoke)] lg:h-[495px] h-max lg:p-16 p-8">
       {/* Left Text Section */}
@@ -69,9 +72,9 @@ const IntroductionWithCTA = () => {
         </div>
 
         <div className="max-w-3xl">
-          <Link href="https://caregiver.careworks.biz/signin" target="_blank" rel="noopener noreferrer">
-            <YellowButton className="px-14 py-7 text-xl">Register now</YellowButton>
-          </Link>
+          <YellowButton className="px-14 py-7 text-xl" onClick={handleRegisterNowClick}>
+            Register now
+          </YellowButton>
         </div>
       </div>
 
