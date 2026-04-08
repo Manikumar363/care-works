@@ -26,7 +26,7 @@ const RegisterAsCareProviderDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
-        className="!top-[156px] !translate-y-0 w-[95vw] sm:w-[75vw] max-w-[1000px] max-h-[calc(100vh-108px)] overflow-y-auto border-none bg-transparent p-0 shadow-none"
+        className="!top-[88px] sm:!top-[156px] !translate-y-0 w-[95vw] sm:w-[75vw] max-w-[1000px] max-h-[calc(100dvh-96px)] sm:max-h-[calc(100vh-108px)] overflow-y-auto border-none bg-transparent p-0 shadow-none"
       >
         <DialogTitle className="sr-only">Register as a caregiver</DialogTitle>
         <DialogDescription className="sr-only">
