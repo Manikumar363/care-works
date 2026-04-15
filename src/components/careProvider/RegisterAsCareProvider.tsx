@@ -49,6 +49,7 @@ const RegisterAsCareProvider = () => {
       toast.error(msg);
     }
     if (!description.trim()) newErrors.description = "Description is required.";
+    if (!resume.trim()) newErrors.resume = "Resume/Document is required.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
